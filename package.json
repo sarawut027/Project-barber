@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "LIFF frontend for Barber System",
   "scripts": {
-    "start": "serve -p $PORT"
+    "start": "serve -l $PORT"
   },
   "dependencies": {
     "serve": "^14.2.1"
