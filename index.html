@@ -139,7 +139,7 @@
         
         // [1] ใส่ LIFF ID ของคุณตรงนี้ (เอามาจาก LINE Developers)
         // ถ้ายังไม่มี ปล่อยว่างไว้ก่อนได้ครับ หน้าเว็บก็ยังทำงานได้
-        const MY_LIFF_ID = ""; 
+        const MY_LIFF_ID = "2011118954-0SUWGeox"; 
 
         // [2] ลิงก์ Webhook (ดึงข้อมูลอัตโนมัติจาก n8n)
         const MAIN_WEBHOOK_URL = "https://primary-production-f7fa8.up.railway.app/webhook/barber-api";
@@ -149,12 +149,15 @@
         // ==========================================
         // ระบบ LIFF Initialization (ดึงชื่อลูกค้าจาก LINE)
         // ==========================================
+        let customer_uid = ""; // ตัวแปรเก็บรหัสลูกค้า
+
         async function initializeLiff() {
             if (!MY_LIFF_ID) return; // ถ้ายังไม่ใส่ LIFF ID ให้ข้ามไป
             try {
                 await liff.init({ liffId: MY_LIFF_ID });
                 if (liff.isLoggedIn()) {
                     const profile = await liff.getProfile();
+                    customer_uid = profile.userId; // เก็บ ID ลูกค้าไว้ส่งให้ n8n
                     document.getElementById('profile-name').innerText = `สวัสดีคุณ ${profile.displayName} 👋`;
                 } else {
                     liff.login();
@@ -282,6 +285,7 @@
                     intent: "record_bill",
                     user_id: barber_id,
                     service_id: parseInt(service_id),
+                    customer_uid: customer_uid,
                     imageBase64: base64Image
                 };
 
