@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="th">
 <head>
     <meta charset="UTF-8">
@@ -19,13 +19,13 @@
         }
     </style>
 </head>
-<body class="text-zinc-800 flex h-screen overflow-hidden">
+<body class="text-zinc-800 flex flex-col md:flex-row h-screen overflow-hidden bg-zinc-50">
 
-    <!-- Sidebar Navigation -->
-    <aside class="w-64 bg-zinc-900 text-white flex flex-col justify-between p-5 select-none shrink-0">
-        <div>
-            <!-- Brand Logo -->
-            <div class="flex items-center gap-3 pb-6 border-b border-zinc-800">
+    <!-- Sidebar Navigation (Bottom Nav on Mobile, Left Sidebar on Desktop) -->
+    <aside class="w-full md:w-64 bg-zinc-900 text-white flex flex-row md:flex-col justify-between p-2 md:p-5 select-none shrink-0 z-20 order-2 md:order-1 border-t md:border-t-0 md:border-r border-zinc-800 shadow-[0_-5px_10px_rgba(0,0,0,0.1)] md:shadow-none pb-safe">
+        <div class="flex-1 md:flex-none flex flex-col justify-center">
+            <!-- Brand Logo (Hidden on mobile) -->
+            <div class="hidden md:flex items-center gap-3 pb-6 border-b border-zinc-800">
                 <div class="bg-amber-500/20 text-amber-500 p-2.5 rounded-xl text-xl border border-amber-500/30">💈</div>
                 <div>
                     <h1 class="font-bold text-base leading-tight text-white">Barber Admin</h1>
@@ -34,44 +34,50 @@
             </div>
 
             <!-- Navigation Tabs -->
-            <nav class="mt-6 space-y-1.5 text-sm">
-                <button onclick="switchTab('dashboard')" id="tab-nav-dashboard" class="tab-btn active w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-zinc-300 hover:bg-zinc-800 transition">
-                    <span>📊</span><span>ภาพรวมรายได้ (Dashboard)</span>
+            <nav class="flex flex-row md:flex-col justify-around md:justify-start gap-1 md:space-y-1.5 text-sm w-full md:mt-6 overflow-x-auto no-scrollbar">
+                <button onclick="switchTab('dashboard')" id="tab-nav-dashboard" class="tab-btn active flex-1 md:w-full flex flex-col md:flex-row items-center justify-center md:justify-start gap-1 md:gap-3 p-2 md:px-4 md:py-3 rounded-xl text-center md:text-left text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 transition min-w-[70px]">
+                    <span class="text-xl md:text-base mb-0.5 md:mb-0">📊</span>
+                    <span class="text-[10px] md:text-sm font-medium whitespace-nowrap leading-tight">แดชบอร์ด <span class="hidden md:inline">(Dashboard)</span></span>
                 </button>
-                <button onclick="switchTab('barbers')" id="tab-nav-barbers" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-zinc-300 hover:bg-zinc-800 transition">
-                    <span>✂️</span><span>จัดการช่าง (Barbers CRUD)</span>
+                <button onclick="switchTab('barbers')" id="tab-nav-barbers" class="tab-btn flex-1 md:w-full flex flex-col md:flex-row items-center justify-center md:justify-start gap-1 md:gap-3 p-2 md:px-4 md:py-3 rounded-xl text-center md:text-left text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 transition min-w-[70px]">
+                    <span class="text-xl md:text-base mb-0.5 md:mb-0">✂️</span>
+                    <span class="text-[10px] md:text-sm font-medium whitespace-nowrap leading-tight">ช่าง <span class="hidden md:inline">(Barbers)</span></span>
                 </button>
-                <button onclick="switchTab('services')" id="tab-nav-services" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-zinc-300 hover:bg-zinc-800 transition">
-                    <span>🏷️</span><span>จัดการบริการ (Services CRUD)</span>
+                <button onclick="switchTab('services')" id="tab-nav-services" class="tab-btn flex-1 md:w-full flex flex-col md:flex-row items-center justify-center md:justify-start gap-1 md:gap-3 p-2 md:px-4 md:py-3 rounded-xl text-center md:text-left text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 transition min-w-[70px]">
+                    <span class="text-xl md:text-base mb-0.5 md:mb-0">🏷️</span>
+                    <span class="text-[10px] md:text-sm font-medium whitespace-nowrap leading-tight">บริการ <span class="hidden md:inline">(Services)</span></span>
                 </button>
-                <button onclick="switchTab('transactions')" id="tab-nav-transactions" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-zinc-300 hover:bg-zinc-800 transition">
-                    <span>🧾</span><span>ประวัติบิล / โมฆะบิล (Void Bill)</span>
+                <button onclick="switchTab('transactions')" id="tab-nav-transactions" class="tab-btn flex-1 md:w-full flex flex-col md:flex-row items-center justify-center md:justify-start gap-1 md:gap-3 p-2 md:px-4 md:py-3 rounded-xl text-center md:text-left text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 transition min-w-[70px]">
+                    <span class="text-xl md:text-base mb-0.5 md:mb-0">🧾</span>
+                    <span class="text-[10px] md:text-sm font-medium whitespace-nowrap leading-tight">บิล/โมฆะ <span class="hidden md:inline">(Transactions)</span></span>
                 </button>
-                <button onclick="switchTab('settlements')" id="tab-nav-settlements" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-zinc-300 hover:bg-zinc-800 transition">
-                    <span>🤝</span><span>ตัดรอบเคลียร์เงินช่าง (Payouts)</span>
+                <button onclick="switchTab('settlements')" id="tab-nav-settlements" class="tab-btn flex-1 md:w-full flex flex-col md:flex-row items-center justify-center md:justify-start gap-1 md:gap-3 p-2 md:px-4 md:py-3 rounded-xl text-center md:text-left text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 transition min-w-[70px]">
+                    <span class="text-xl md:text-base mb-0.5 md:mb-0">🤝</span>
+                    <span class="text-[10px] md:text-sm font-medium whitespace-nowrap leading-tight">เคลียร์เงิน <span class="hidden md:inline">(Payouts)</span></span>
                 </button>
             </nav>
         </div>
 
-        <!-- Footer Info -->
-        <div class="pt-4 border-t border-zinc-800 text-xs text-zinc-500 text-center">
-            Barber Management v2.0 • Railway MySQL
+        <!-- Footer Info (Hidden on mobile) -->
+        <div class="hidden md:block pt-4 border-t border-zinc-800 text-xs text-zinc-500 text-center">
+            Barber Management v2.0 • Railway
         </div>
     </aside>
 
     <!-- Main Content Area -->
-    <main class="flex-1 flex flex-col overflow-y-auto">
+    <main class="flex-1 flex flex-col overflow-y-auto order-1 md:order-2 pb-2 md:pb-0">
         <!-- Top Navbar -->
-        <header class="h-16 bg-white border-b border-zinc-200 flex items-center justify-between px-8 sticky top-0 z-10">
-            <h2 id="page-title" class="font-bold text-lg text-zinc-800">ภาพรวมรายได้ (Dashboard)</h2>
-            <div class="flex items-center gap-4">
-                <span class="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full font-medium">● ระบบออนไลน์ (Live)</span>
-                <span class="text-sm font-semibold text-zinc-700">ผู้ดูแลระบบ (Owner)</span>
+        <header class="h-16 bg-white border-b border-zinc-200 flex items-center justify-between px-4 md:px-8 sticky top-0 z-10 shrink-0">
+            <h2 id="page-title" class="font-bold text-base md:text-lg text-zinc-800 truncate pr-2">ภาพรวมรายได้ (Dashboard)</h2>
+            <div class="flex items-center gap-2 md:gap-4 shrink-0">
+                <span class="hidden md:inline-flex text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full font-medium">● ระบบออนไลน์ (Live)</span>
+                <span class="inline-flex md:hidden text-xs bg-green-100 text-green-700 w-3 h-3 rounded-full"></span>
+                <span class="text-xs md:text-sm font-semibold text-zinc-700">Owner</span>
             </div>
         </header>
 
         <!-- Dynamic Content Body -->
-        <div class="p-8 space-y-6">
+        <div class="p-4 md:p-8 space-y-4 md:space-y-6">
 
             <!-- TAB 1: DASHBOARD -->
             <section id="view-dashboard" class="space-y-6">
@@ -110,7 +116,7 @@
                         + เพิ่มช่างใหม่
                     </button>
                 </div>
-                <div class="bg-white rounded-2xl border border-zinc-200 overflow-hidden shadow-sm">
+                <div class="bg-white rounded-2xl border border-zinc-200 overflow-x-auto shadow-sm">
                     <table class="w-full text-left text-sm">
                         <thead class="bg-zinc-100 text-zinc-600 text-xs font-semibold uppercase">
                             <tr>
@@ -137,7 +143,7 @@
                         + เพิ่มบริการใหม่
                     </button>
                 </div>
-                <div class="bg-white rounded-2xl border border-zinc-200 overflow-hidden shadow-sm">
+                <div class="bg-white rounded-2xl border border-zinc-200 overflow-x-auto shadow-sm">
                     <table class="w-full text-left text-sm">
                         <thead class="bg-zinc-100 text-zinc-600 text-xs font-semibold uppercase">
                             <tr>
@@ -160,7 +166,7 @@
                 <div class="flex justify-between items-center">
                     <h3 class="font-bold text-base text-zinc-800">ประวัติการชำระเงินและธุรกรรม (Transactions)</h3>
                 </div>
-                <div class="bg-white rounded-2xl border border-zinc-200 overflow-hidden shadow-sm">
+                <div class="bg-white rounded-2xl border border-zinc-200 overflow-x-auto shadow-sm">
                     <table class="w-full text-left text-sm">
                         <thead class="bg-zinc-100 text-zinc-600 text-xs font-semibold uppercase">
                             <tr>
@@ -197,7 +203,7 @@
                 </div>
 
                 <!-- Payout History Table -->
-                <div class="bg-white rounded-2xl border border-zinc-200 overflow-hidden shadow-sm mt-6">
+                <div class="bg-white rounded-2xl border border-zinc-200 overflow-x-auto shadow-sm mt-6">
                     <div class="p-4 bg-zinc-50 border-b border-zinc-200 font-bold text-sm text-zinc-700">
                         📋 ประวัติการตัดรอบเคลียร์เงินที่ผ่านมา (Payout History)
                     </div>
@@ -230,27 +236,34 @@
         const ADMIN_PAYOUTS_URL = "https://primary-production-f7fa8.up.railway.app/webhook/api/admin/payouts";
         const ADMIN_SETTLE_URL = "https://primary-production-f7fa8.up.railway.app/webhook/api/admin/settle";
 
-        // Mock State Data (จะซิงค์กับ API เมื่อเปิดใช้งาน)
-        let barbers = [
-            { user_id: 1, full_name: 'ช่างเอก (Master Barber)', role: 'barber', commission_rate: 50.00, is_active: 1 },
-            { user_id: 2, full_name: 'ช่างบอย (Senior Barber)', role: 'barber', commission_rate: 50.00, is_active: 1 }
-        ];
+        // API Endpoints
+        const GET_BARBERS_URL = "https://primary-production-f7fa8.up.railway.app/webhook/api/barbers";
+        const GET_SERVICES_URL = "https://primary-production-f7fa8.up.railway.app/webhook/api/services";
 
-        let services = [
-            { service_id: 1, service_name: 'ตัดผมชายวินเทจ (Vintage Haircut)', base_price: 350.00, is_active: 1 },
-            { service_id: 2, service_name: 'ตัดผม + สระไดร์เซ็ตทรง (Cut & Wash)', base_price: 450.00, is_active: 1 },
-            { service_id: 3, service_name: 'โกนหนวดเคราจัดทรง (Beard Shave)', base_price: 250.00, is_active: 1 }
-        ];
+        // Global State
+        let barbers = [];
+        let services = [];
+        let transactions = [];
+        let payouts = [];
 
-        let transactions = [
-            { transaction_id: 101, barber_name: 'ช่างเอก', service_name: 'ตัดผมชายวินเทจ', payment_method: 'transfer', actual_price: 350.00, commission_amount: 175.00, status: 'completed', payout_status: 'unsettled' },
-            { transaction_id: 102, barber_name: 'ช่างเอก', service_name: 'ตัดผม + สระไดร์', payment_method: 'cash', actual_price: 450.00, commission_amount: 225.00, status: 'completed', payout_status: 'unsettled' },
-            { transaction_id: 103, barber_name: 'ช่างบอย', service_name: 'ตัดผมชายวินเทจ', payment_method: 'transfer', actual_price: 350.00, commission_amount: 175.00, status: 'completed', payout_status: 'settled' }
-        ];
+        async function fetchMasterData() {
+            try {
+                // ดึงข้อมูลช่าง
+                const barberRes = await fetch(GET_BARBERS_URL);
+                const barberData = await barberRes.json();
+                if(barberData) barbers = Array.isArray(barberData) ? barberData : [barberData];
 
-        let payouts = [
-            { payout_id: 'PAY-0011', barber_name: 'ช่างบอย', date_range: '17/08/2026 - 23/08/2026', total_jobs: 22, net_payout: 3850.00, status: 'paid' }
-        ];
+                // ดึงข้อมูลบริการ
+                const serviceRes = await fetch(GET_SERVICES_URL);
+                const serviceData = await serviceRes.json();
+                if(serviceData) services = Array.isArray(serviceData) ? serviceData : [serviceData];
+
+                renderData();
+            } catch (err) {
+                console.error("Error loading API data:", err);
+                Swal.fire('ข้อผิดพลาด', 'ไม่สามารถเชื่อมต่อฐานข้อมูลได้', 'error');
+            }
+        }
 
         // Tab Navigation
         function switchTab(tabId) {
@@ -524,7 +537,7 @@
         }
 
         window.onload = () => {
-            renderData();
+            fetchMasterData();
         };
     </script>
 </body>
