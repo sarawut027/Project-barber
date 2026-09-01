@@ -210,17 +210,31 @@
         let barbers = [];
         let services = [];
 
+        // ฟังก์ชันช่วยดึงข้อมูล และป้องกัน error กรณี n8n ส่งกลับมาเป็น message (เช่น ไม่มีข้อมูล)
+        function parseN8nResponse(rawData) {
+            if (!rawData) return [];
+            if (Array.isArray(rawData)) {
+                return rawData.map(x => x.json || x);
+            }
+            if (typeof rawData === 'object') {
+                if (rawData.message !== undefined && (rawData.code !== undefined || rawData.message.includes('No item') || rawData.message.includes('Unused'))) {
+                    return []; 
+                }
+                if (rawData.json) return [rawData.json];
+                return [rawData];
+            }
+            return [];
+        }
+
         async function fetchMasterData() {
             try {
                 const barberRes = await fetch(GET_BARBERS_URL);
-                const barberData = await barberRes.json();
-                if(barberData) barbers = (Array.isArray(barberData) ? barberData : [barberData]).map(x => x.json || x);
+                barbers = parseN8nResponse(await barberRes.json());
             } catch (err) { console.error(err); }
 
             try {
                 const serviceRes = await fetch(GET_SERVICES_URL);
-                const serviceData = await serviceRes.json();
-                if(serviceData) services = (Array.isArray(serviceData) ? serviceData : [serviceData]).map(x => x.json || x);
+                services = parseN8nResponse(await serviceRes.json());
             } catch (err) { console.error(err); }
 
             renderData();
@@ -276,12 +290,7 @@
         async function fetchAndRenderTransactions() {
             try {
                 const res = await fetch(ADMIN_TRANSACTIONS_URL);
-                const rawData = await res.json();
-                let txData = [];
-                if (rawData && Object.keys(rawData).length > 0) {
-                    txData = Array.isArray(rawData) ? rawData : [rawData];
-                    txData = txData.map(x => x.json || x);
-                }
+                const txData = parseN8nResponse(await res.json());
                 
                 let totalRev = 0;
                 let totalComm = 0;
@@ -324,12 +333,7 @@
         async function renderSettlements() {
             try {
                 const res = await fetch(ADMIN_PAYOUTS_URL);
-                const rawData = await res.json();
-                let pData = [];
-                if (rawData && Object.keys(rawData).length > 0) {
-                    pData = Array.isArray(rawData) ? rawData : [rawData];
-                    pData = pData.map(x => x.json || x);
-                }
+                const pData = parseN8nResponse(await res.json());
                 
                 let cards = '';
                 if(pData.length === 0) {
@@ -408,6 +412,8 @@
                             renderSettlements();
                             fetchAndRenderTransactions();
                             Swal.fire('เคลียร์ยอดสำเร็จ!', 'บันทึกการตัดรอบและส่งแจ้งเตือนเรียบร้อย', 'success');
+                        } else {
+                            Swal.fire('เกิดข้อผิดพลาด', 'ไม่สามารถบันทึกข้อมูลได้', 'error');
                         }
                     } catch (error) { Swal.fire('Error', 'การเชื่อมต่อผิดพลาด', 'error'); }
                 }
