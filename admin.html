@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="th">
 <head>
     <meta charset="UTF-8">
@@ -247,22 +247,29 @@
         let payouts = [];
 
         async function fetchMasterData() {
+            // ดึงข้อมูลช่าง
             try {
-                // ดึงข้อมูลช่าง
                 const barberRes = await fetch(GET_BARBERS_URL);
                 const barberData = await barberRes.json();
                 if(barberData) barbers = Array.isArray(barberData) ? barberData : [barberData];
+            } catch (err) {
+                console.error("Error loading Barbers:", err);
+            }
 
-                // ดึงข้อมูลบริการ
+            // ดึงข้อมูลบริการ
+            try {
                 const serviceRes = await fetch(GET_SERVICES_URL);
                 const serviceData = await serviceRes.json();
                 if(serviceData) services = Array.isArray(serviceData) ? serviceData : [serviceData];
-
-                renderData();
             } catch (err) {
-                console.error("Error loading API data:", err);
-                Swal.fire('ข้อผิดพลาด', 'ไม่สามารถเชื่อมต่อฐานข้อมูลได้', 'error');
+                console.error("Error loading Services:", err);
             }
+
+            if(barbers.length === 0 && services.length === 0) {
+                Swal.fire('แจ้งเตือน', 'ไม่สามารถเชื่อมต่อฐานข้อมูลได้ หรือยังไม่มีข้อมูลในระบบ', 'warning');
+            }
+
+            renderData();
         }
 
         // Tab Navigation
@@ -288,38 +295,45 @@
             // Render Barbers
             let barberRows = '';
             barbers.forEach(b => {
+                const isActive = b.is_active !== undefined ? b.is_active : 1;
+                const role = b.role || 'ช่างตัดผม';
+                const commission = b.commission_rate !== undefined ? b.commission_rate : 50;
+
                 barberRows += `
                     <tr class="hover:bg-zinc-50">
                         <td class="p-4 font-mono font-bold text-zinc-600">#${b.user_id}</td>
                         <td class="p-4 font-semibold text-zinc-900">${b.full_name}</td>
-                        <td class="p-4 text-zinc-500">${b.role}</td>
-                        <td class="p-4 font-bold text-amber-600">${b.commission_rate}%</td>
-                        <td class="p-4">${b.is_active ? '<span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs font-semibold">เปิดใช้งาน</span>' : '<span class="bg-zinc-200 text-zinc-600 px-2 py-0.5 rounded-full text-xs">ปิด</span>'}</td>
-                        <td class="p-4 text-center space-x-2">
+                        <td class="p-4 text-zinc-500">${role}</td>
+                        <td class="p-4 font-bold text-amber-600">${commission}%</td>
+                        <td class="p-4">${isActive ? '<span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs font-semibold">เปิดใช้งาน</span>' : '<span class="bg-zinc-200 text-zinc-600 px-2 py-0.5 rounded-full text-xs">ปิด</span>'}</td>
+                        <td class="p-4 text-center space-x-2 whitespace-nowrap">
                             <button onclick="editBarber(${b.user_id})" class="text-amber-600 hover:underline font-semibold text-xs">แก้ไข %</button>
-                            <button onclick="toggleBarberStatus(${b.user_id})" class="text-amber-600 hover:underline font-semibold text-xs">${b.is_active ? 'ระงับ' : 'เปิด'}</button>
+                            <button onclick="toggleBarberStatus(${b.user_id})" class="text-amber-600 hover:underline font-semibold text-xs">${isActive ? 'ระงับ' : 'เปิด'}</button>
                         </td>
                     </tr>
                 `;
             });
+            if(barbers.length === 0) barberRows = '<tr><td colspan="6" class="p-6 text-center text-zinc-500">ไม่มีข้อมูลช่าง</td></tr>';
             document.getElementById('barber-table-body').innerHTML = barberRows;
 
             // Render Services
             let serviceRows = '';
             services.forEach(s => {
+                const isActive = s.is_active !== undefined ? s.is_active : 1;
                 serviceRows += `
                     <tr class="hover:bg-zinc-50">
                         <td class="p-4 font-mono font-bold text-zinc-600">#${s.service_id}</td>
                         <td class="p-4 font-semibold text-zinc-900">${s.service_name}</td>
-                        <td class="p-4 font-bold text-zinc-900">${s.base_price.toFixed(2)} ฿</td>
-                        <td class="p-4">${s.is_active ? '<span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs font-semibold">เปิดให้บริการ</span>' : '<span class="bg-zinc-200 text-zinc-600 px-2 py-0.5 rounded-full text-xs">ปิดบริการ</span>'}</td>
-                        <td class="p-4 text-center space-x-2">
+                        <td class="p-4 font-bold text-zinc-900">${parseFloat(s.base_price).toFixed(2)} ฿</td>
+                        <td class="p-4">${isActive ? '<span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs font-semibold">เปิดให้บริการ</span>' : '<span class="bg-zinc-200 text-zinc-600 px-2 py-0.5 rounded-full text-xs">ปิดบริการ</span>'}</td>
+                        <td class="p-4 text-center space-x-2 whitespace-nowrap">
                             <button onclick="editServicePrice(${s.service_id})" class="text-amber-600 hover:underline font-semibold text-xs">ปรับราคา</button>
-                            <button onclick="toggleServiceStatus(${s.service_id})" class="text-amber-600 hover:underline font-semibold text-xs">${s.is_active ? 'ปิดบริการ' : 'เปิดบริการ'}</button>
+                            <button onclick="toggleServiceStatus(${s.service_id})" class="text-amber-600 hover:underline font-semibold text-xs">${isActive ? 'ปิดบริการ' : 'เปิดบริการ'}</button>
                         </td>
                     </tr>
                 `;
             });
+            if(services.length === 0) serviceRows = '<tr><td colspan="5" class="p-6 text-center text-zinc-500">ไม่มีข้อมูลบริการ</td></tr>';
             document.getElementById('service-table-body').innerHTML = serviceRows;
 
             // Call to render dynamic transactions from API if available
