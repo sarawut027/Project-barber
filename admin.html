@@ -349,7 +349,7 @@
                                 <div class="text-sm text-zinc-500 mb-4">ยอดเงินที่ต้องโอนให้ช่าง:</div>
                                 <div class="text-3xl font-bold text-amber-600 mb-4">฿${parseFloat(p.total_commission || 0).toFixed(2)}</div>
                             </div>
-                            <button onclick="executeSettlement(${p.user_id}, '${p.full_name}', ${p.total_jobs}, ${p.total_revenue}, ${p.total_commission})" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl transition">
+                            <button onclick="executeSettlement(${p.user_id}, '${p.full_name}', '${p.line_uid || ''}', ${p.total_jobs}, ${p.total_revenue}, ${p.total_commission})" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl transition">
                                 💸 ยืนยันโอนเงิน & แจ้งเตือน
                             </button>
                         </div>`;
@@ -391,7 +391,7 @@
             });
         }
 
-        function executeSettlement(userId, barberName, totalJobs, totalRevenue, totalCommission) {
+        function executeSettlement(userId, barberName, lineUid, totalJobs, totalRevenue, totalCommission) {
             Swal.fire({
                 title: 'ตัดรอบเคลียร์เงิน ' + barberName,
                 html: '<div class="text-left text-sm space-y-3"><p>ยอดเงินที่ต้องโอนให้ช่าง: <strong class="text-emerald-600 text-base">฿' + parseFloat(totalCommission).toFixed(2) + '</strong></p></div>',
@@ -406,7 +406,7 @@
                         let response = await fetch(ADMIN_SETTLE_URL, {
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ user_id: userId, total_jobs: totalJobs, total_revenue: totalRevenue, total_commission: totalCommission })
+                            body: JSON.stringify({ user_id: userId, line_uid: lineUid, total_jobs: totalJobs, total_revenue: totalRevenue, total_commission: totalCommission })
                         });
                         if (response.ok) {
                             renderSettlements();
