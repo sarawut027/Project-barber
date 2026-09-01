@@ -14,7 +14,7 @@
         
         body {
             font-family: 'Prompt', sans-serif;
-            background-color: #f8fafc;
+            background-color: #fafafa;
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -35,18 +35,18 @@
         }
 
         .card-selected {
-            border-color: #0f172a !important;
-            background-color: #f1f5f9 !important;
+            border-color: #18181b !important; /* zinc-900 */
+            background-color: #f4f4f5 !important; /* zinc-100 */
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
 
         .dropzone {
             transition: all 0.3s ease;
-            background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='16' ry='16' stroke='%23CBD5E1' stroke-width='4' stroke-dasharray='10%2c 10' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
+            background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='16' ry='16' stroke='%23d4d4d8' stroke-width='4' stroke-dasharray='10%2c 10' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
             border-radius: 16px;
         }
         .dropzone.has-file {
-            background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='%23F0FDF4' rx='16' ry='16' stroke='%2322C55E' stroke-width='4' stroke-dasharray='10%2c 10' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
+            background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='%23fef3c7' rx='16' ry='16' stroke='%23f59e0b' stroke-width='4' stroke-dasharray='10%2c 10' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
         }
 
         ::-webkit-scrollbar {
@@ -54,20 +54,20 @@
         }
     </style>
 </head>
-<body class="pb-36 text-slate-800 bg-slate-50">
+<body class="pb-36 text-zinc-800 bg-zinc-50">
 
     <!-- Header -->
-    <div class="bg-slate-900 rounded-b-[2.5rem] pt-12 pb-8 px-6 shadow-md mb-8 sticky top-0 z-10">
+    <div class="bg-zinc-900 rounded-b-[2rem] pt-6 pb-5 px-6 shadow-lg mb-8 sticky top-0 z-10">
         <div class="max-w-md mx-auto flex items-center gap-4">
             <!-- โลโก้ร้าน -->
-            <div class="w-16 h-16 shrink-0 bg-white rounded-2xl p-1 shadow-lg border-2 border-slate-700">
+            <div class="w-14 h-14 shrink-0 bg-black rounded-2xl p-0.5 shadow-md border border-zinc-700 overflow-hidden">
                 <img src="./images/logo.png" alt="Shop Logo" class="w-full h-full object-cover rounded-xl" onerror="this.outerHTML='<div class=\'w-full h-full flex items-center justify-center text-3xl\'>💈</div>'">
             </div>
             <div>
-                <h1 class="text-white text-2xl font-bold tracking-wide">แจ้งชำระเงิน</h1>
-                <p class="text-slate-300 text-sm mt-1 flex items-center gap-1.5" id="profile-name">
-                    <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
-                    ระบบพร้อมใช้งาน
+                <h1 class="text-white text-xl font-bold tracking-wide">แจ้งชำระเงิน</h1>
+                <p class="text-zinc-400 text-sm mt-0.5 flex items-center gap-1.5" id="profile-name">
+                    <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+                    ระบบจองคิวออนไลน์
                 </p>
             </div>
         </div>
@@ -77,13 +77,13 @@
         <!-- ส่วนที่ 1: เลือกช่าง -->
         <div>
             <div class="flex items-center mb-3">
-                <span class="bg-slate-900 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mr-2">1</span>
+                <span class="bg-zinc-900 text-amber-500 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mr-2">1</span>
                 <h2 class="text-lg font-bold">เลือกช่างที่ให้บริการคุณ</h2>
             </div>
             <div id="barber-container" class="grid grid-cols-2 gap-4">
                 <!-- Skeleton Loading -->
-                <div class="animate-pulse bg-slate-200 h-24 rounded-2xl col-span-1"></div>
-                <div class="animate-pulse bg-slate-200 h-24 rounded-2xl col-span-1"></div>
+                <div class="animate-pulse bg-zinc-200 h-24 rounded-2xl col-span-1"></div>
+                <div class="animate-pulse bg-zinc-200 h-24 rounded-2xl col-span-1"></div>
             </div>
             <input type="hidden" id="barber_id" required>
         </div>
@@ -91,13 +91,13 @@
         <!-- ส่วนที่ 2: เลือกบริการ -->
         <div>
             <div class="flex items-center mb-3">
-                <span class="bg-slate-900 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mr-2">2</span>
+                <span class="bg-zinc-900 text-amber-500 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mr-2">2</span>
                 <h2 class="text-lg font-bold">เลือกบริการที่ทำ</h2>
             </div>
             <div id="service-container" class="flex flex-col gap-3">
                 <!-- Skeleton Loading -->
-                <div class="animate-pulse bg-slate-200 h-16 rounded-2xl"></div>
-                <div class="animate-pulse bg-slate-200 h-16 rounded-2xl"></div>
+                <div class="animate-pulse bg-zinc-200 h-16 rounded-2xl"></div>
+                <div class="animate-pulse bg-zinc-200 h-16 rounded-2xl"></div>
             </div>
             <input type="hidden" id="service_id" required>
             <input type="hidden" id="service_price" value="0">
@@ -106,17 +106,17 @@
         <!-- ส่วนที่ 3: เลือกช่องทางชำระเงิน (โอนเงิน / เงินสด) -->
         <div>
             <div class="flex items-center mb-3">
-                <span class="bg-slate-900 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mr-2">3</span>
+                <span class="bg-zinc-900 text-amber-500 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mr-2">3</span>
                 <h2 class="text-lg font-bold">วิธีชำระเงิน</h2>
             </div>
             <div class="grid grid-cols-2 gap-4">
                 <div id="pay-method-transfer" onclick="setPaymentMethod('transfer')" class="card-selectable card-selected rounded-2xl p-4 text-center flex flex-col items-center justify-center min-h-[5.5rem]">
                     <span class="text-2xl mb-1">📱</span>
-                    <span class="font-bold text-sm text-slate-800">โอนเงิน (สลิป)</span>
+                    <span class="font-bold text-sm text-zinc-800">โอนเงิน (สลิป)</span>
                 </div>
                 <div id="pay-method-cash" onclick="setPaymentMethod('cash')" class="card-selectable rounded-2xl p-4 text-center flex flex-col items-center justify-center min-h-[5.5rem]">
                     <span class="text-2xl mb-1">💵</span>
-                    <span class="font-bold text-sm text-slate-800">เงินสด (Cash)</span>
+                    <span class="font-bold text-sm text-zinc-800">เงินสด (Cash)</span>
                 </div>
             </div>
             <input type="hidden" id="payment_method" value="transfer">
@@ -125,12 +125,12 @@
         <!-- ส่วนที่ 4: อัปโหลดสลิป (แสดงเฉพาะเมื่อเลือกโอนเงิน) -->
         <div id="slip-section" class="space-y-4">
             <div class="flex items-center mb-1">
-                <span class="bg-slate-900 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mr-2">4</span>
+                <span class="bg-zinc-900 text-amber-500 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mr-2">4</span>
                 <h2 class="text-lg font-bold">โอนเงินและแนบสลิป</h2>
             </div>
 
             <!-- 💳 ข้อมูลบัญชีธนาคาร -->
-            <div class="bg-white border-2 border-slate-100 rounded-2xl p-4 shadow-sm">
+            <div class="bg-white border-2 border-zinc-100 rounded-2xl p-4 shadow-sm">
                 <div class="text-center mb-4">
                     <p class="text-sm font-semibold text-slate-600 mb-2">สแกน QR เพื่อโอนเงินเข้าบัญชี</p>
                     <div class="relative inline-block">
@@ -177,8 +177,8 @@
     </div>
 
     <!-- ปุ่มยืนยัน (Sticky Bottom) -->
-    <div class="fixed bottom-0 left-0 right-0 p-5 pb-8 bg-gradient-to-t from-slate-50 via-slate-50 to-transparent z-20 pointer-events-none">
-        <button onclick="submitPayment()" class="pointer-events-auto w-full max-w-md mx-auto block bg-slate-900 text-white text-lg font-bold py-4 px-4 rounded-2xl shadow-[0_10px_20px_-10px_rgba(0,0,0,0.6)] hover:bg-slate-800 active:scale-95 transition-all duration-200">
+    <div class="fixed bottom-0 left-0 right-0 p-5 pb-8 bg-gradient-to-t from-zinc-50 via-zinc-50 to-transparent z-20 pointer-events-none">
+        <button onclick="submitPayment()" class="pointer-events-auto w-full max-w-md mx-auto block bg-zinc-900 text-amber-500 text-lg font-bold py-4 px-4 rounded-2xl shadow-[0_10px_20px_-10px_rgba(0,0,0,0.6)] hover:bg-zinc-800 active:scale-95 transition-all duration-200 border border-zinc-800">
             ยืนยันการชำระเงิน
         </button>
     </div>
@@ -202,7 +202,7 @@
                 if (liff.isLoggedIn()) {
                     const profile = await liff.getProfile();
                     customer_uid = profile.userId;
-                    document.getElementById('profile-name').innerText = `สวัสดีคุณ ${profile.displayName} 👋`;
+                    document.getElementById('profile-name').innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span> สวัสดีคุณ ${profile.displayName} 👋`;
                 } else {
                     liff.login();
                 }
@@ -239,11 +239,11 @@
             const icon = document.getElementById('upload-icon');
             
             if (fileName) {
-                document.getElementById('file-name-display').innerHTML = `<span class="text-green-600 font-bold text-base">✓ เลือกไฟล์สำเร็จ</span>`;
+                document.getElementById('file-name-display').innerHTML = `<span class="text-amber-600 font-bold text-base">✓ เลือกไฟล์สำเร็จ</span>`;
                 document.getElementById('file-hint').innerText = fileName;
                 dropzone.classList.add('has-file');
                 icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>`;
-                icon.classList.replace('text-slate-400', 'text-green-500');
+                icon.classList.replace('text-slate-400', 'text-amber-500');
             }
         });
 
@@ -277,13 +277,13 @@
                 let barberHTML = '';
                 barbers.forEach(b => {
                     const barberIconOrImage = b.image_url 
-                        ? `<img src="${b.image_url}" class="w-14 h-14 rounded-full mb-2 object-cover border-2 border-slate-200">` 
+                        ? `<img src="${b.image_url}" class="w-14 h-14 rounded-full mb-2 object-cover border-2 border-zinc-200 shadow-sm">` 
                         : `<div class="text-3xl mb-1">👨‍🎤</div>`;
                         
                     barberHTML += `
                         <div onclick="selectBarber('${b.user_id}', '${b.full_name}', '${b.line_uid}', this)" class="barber-card card-selectable rounded-2xl p-4 text-center flex flex-col items-center justify-center min-h-[6rem]">
                             ${barberIconOrImage}
-                            <div class="font-bold text-slate-800 text-sm">${b.full_name}</div>
+                            <div class="font-bold text-zinc-800 text-sm">${b.full_name}</div>
                         </div>
                     `;
                 });
@@ -297,16 +297,16 @@
                 let serviceHTML = '';
                 services.forEach(s => {
                     const iconOrImage = s.image_url 
-                        ? `<img src="${s.image_url}" class="w-10 h-10 rounded-lg mr-3 object-cover border border-slate-200">` 
-                        : `<div class="bg-slate-100 p-2 rounded-lg mr-3 text-lg">✂️</div>`;
+                        ? `<img src="${s.image_url}" class="w-10 h-10 rounded-lg mr-3 object-contain">` 
+                        : `<div class="bg-zinc-100 p-2 rounded-lg mr-3 text-lg">✂️</div>`;
                         
                     serviceHTML += `
-                        <div onclick="selectService(${s.service_id}, '${s.service_name}', ${s.base_price}, this)" class="service-card card-selectable rounded-2xl p-4 flex justify-between items-center">
+                        <div onclick="selectService(${s.service_id}, '${s.service_name}', ${s.base_price}, this)" class="service-card card-selectable rounded-2xl p-4 flex justify-between items-center border border-zinc-100">
                             <div class="flex items-center">
                                 ${iconOrImage}
-                                <span class="font-bold text-slate-800">${s.service_name}</span>
+                                <span class="font-bold text-zinc-800">${s.service_name}</span>
                             </div>
-                            <span class="bg-slate-900 text-white text-sm font-semibold px-4 py-1.5 rounded-full shadow-sm">${Math.round(s.base_price).toLocaleString()} ฿</span>
+                            <span class="text-zinc-800 text-base font-bold whitespace-nowrap ml-2">${Math.round(s.base_price).toLocaleString()} ฿</span>
                         </div>
                     `;
                 });
