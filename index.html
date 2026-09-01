@@ -239,7 +239,6 @@
                 // ดึงรายชื่อช่าง
                 const barberRes = await fetch(GET_BARBERS_URL);
                 const barbersData = await barberRes.json();
-                // ถ้ามีข้อมูลเดียว n8n จะส่งมาเป็น Object (ไม่ใช่อาร์เรย์) เราต้องแปลงให้เป็น Array ก่อนใช้ forEach
                 const barbers = Array.isArray(barbersData) ? barbersData : [barbersData];
                 
                 let barberHTML = '';
@@ -260,13 +259,17 @@
                 
                 let serviceHTML = '';
                 services.forEach(s => {
+                    const iconOrImage = s.image_url 
+                        ? `<img src="${s.image_url}" class="w-10 h-10 rounded-lg mr-3 object-cover border border-slate-200">` 
+                        : `<div class="bg-slate-100 p-2 rounded-lg mr-3 text-lg">✂️</div>`;
+                        
                     serviceHTML += `
                         <div onclick="selectService(${s.service_id}, '${s.service_name}', ${s.base_price}, this)" class="service-card card-selectable rounded-2xl p-4 flex justify-between items-center">
                             <div class="flex items-center">
-                                <div class="bg-slate-100 p-2 rounded-lg mr-3 text-lg">✂️</div>
+                                ${iconOrImage}
                                 <span class="font-bold text-slate-800">${s.service_name}</span>
                             </div>
-                            <span class="bg-slate-900 text-white text-sm font-semibold px-4 py-1.5 rounded-full shadow-sm">${s.base_price} ฿</span>
+                            <span class="bg-slate-900 text-white text-sm font-semibold px-4 py-1.5 rounded-full shadow-sm">${Math.round(s.base_price).toLocaleString()} ฿</span>
                         </div>
                     `;
                 });

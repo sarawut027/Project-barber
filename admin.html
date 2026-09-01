@@ -298,6 +298,84 @@
                     <tr class="hover:bg-slate-50">
                         <td class="p-4 font-mono font-bold text-slate-600">#${s.service_id}</td>
                         <td class="p-4 font-semibold text-slate-900">${s.service_name}</td>
+                        <td class="p-4 font-bold text-slate-900">${Math.round(s.base_price).toLocaleString()} ฿</td>
+                        <td class="p-4">${s.is_active ? '<span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs font-semibold">เปิดให้บริการ</span>' : '<span class="bg-slate-200 text-slate-600 px-2 py-0.5 rounded-full text-xs">ปิดบริการ</span>'}</td>
+                        <td class="p-4 text-center space-x-2">
+                            <button onclick="editServicePrice(${s.service_id})" class="text-sky-600 hover:underline font-semibold text-xs">ปรับราคา</button>
+                            <button onclick="toggleServiceStatus(${s.service_id})" class="text-amber-600 hover:underline font-semibold text-xs">${s.is_active ? 'ปิดบริการ' : 'เปิดบริการ'}</button>
+                        </td>
+                    </tr>
+                `;
+            });
+            document.getElementById('service-table-body').innerHTML = serviceRows;
+
+        const ADMIN_TRANSACTIONS_URL = "https://primary-production-f7fa8.up.railway.app/webhook/api/admin/transactions";
+        const ADMIN_VOID_URL = "https://primary-production-f7fa8.up.railway.app/webhook/api/admin/void";
+
+        async function fetchAndRenderTransactions() {
+            try {
+                const res = await fetch(ADMIN_TRANSACTIONS_URL);
+                const rawData = await res.json();
+                let txData = [];
+                if (rawData && Object.keys(rawData).length > 0) {
+                    txData = Array.isArray(rawData) ? rawData : [rawData];
+                }
+                
+                let txRows = '';
+                if(txData.length === 0) {
+                    txRows = '<tr><td colspan="9" class="p-6 text-center text-slate-500">ไม่มีประวัติบิล</td></tr>';
+                } else {
+                    txData.forEach(t => {
+                        txRows += `
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-4 font-mono font-bold text-slate-600">#TXN-${t.transaction_id}</td>
+                                <td class="p-4 font-semibold text-slate-800">${t.barber_name}</td>
+                                <td class="p-4 text-slate-600">${t.service_name}</td>
+                                <td class="p-4"><span class="text-xs px-2 py-1 rounded font-medium ${t.payment_method === 'transfer' ? 'bg-sky-100 text-sky-700' : 'bg-emerald-100 text-emerald-700'}">${t.payment_method === 'transfer' ? 'โอนเงิน' : 'เงินสด'}</span></td>
+                                <td class="p-4 font-bold text-slate-900">฿${parseFloat(t.actual_price).toFixed(2)}</td>
+                                <td class="p-4 font-bold text-sky-600">฿${parseFloat(t.commission_amount).toFixed(2)}</td>
+                                <td class="p-4">${t.status === 'completed' ? '<span class="text-green-600 font-semibold text-xs">✓ ปกติ</span>' : '<span class="text-red-500 font-semibold text-xs">✕ โมฆะ (Void)</span>'}</td>
+                                <td class="p-4">${t.payout_status === 'settled' ? '<span class="bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded-full font-semibold">เคลียร์แล้ว</span>' : '<span class="bg-amber-100 text-amber-700 text-xs px-2 py-0.5 rounded-full font-semibold">รอเคลียร์</span>'}</td>
+                                <td class="p-4 text-center">
+                                    ${t.status === 'completed' ? `<button onclick="voidBill(${t.transaction_id}, '${t.barber_line_uid}')" class="bg-red-50 hover:bg-red-100 text-red-600 px-3 py-1 rounded-lg text-xs font-bold border border-red-200">โมฆะบิล (Void)</button>` : '<span class="text-slate-400 text-xs">-</span>'}
+                                </td>
+                            </tr>
+                        `;
+                    });
+                }
+                document.getElementById('transaction-table-body').innerHTML = txRows;
+            } catch (err) {
+                document.getElementById('transaction-table-body').innerHTML = '<tr><td colspan="9" class="p-6 text-center text-red-500 font-bold">⚠️ ไม่สามารถโหลดข้อมูลบิลได้</td></tr>';
+            }
+        }
+
+        function renderData() {
+            // Render Barbers
+            let barberRows = '';
+            barbers.forEach(b => {
+                barberRows += `
+                    <tr class="hover:bg-slate-50">
+                        <td class="p-4 font-mono font-bold text-slate-600">#${b.user_id}</td>
+                        <td class="p-4 font-semibold text-slate-900">${b.full_name}</td>
+                        <td class="p-4 text-slate-500">${b.role}</td>
+                        <td class="p-4 font-bold text-sky-600">${b.commission_rate}%</td>
+                        <td class="p-4">${b.is_active ? '<span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs font-semibold">เปิดใช้งาน</span>' : '<span class="bg-slate-200 text-slate-600 px-2 py-0.5 rounded-full text-xs">ปิด</span>'}</td>
+                        <td class="p-4 text-center space-x-2">
+                            <button onclick="editBarber(${b.user_id})" class="text-sky-600 hover:underline font-semibold text-xs">แก้ไข %</button>
+                            <button onclick="toggleBarberStatus(${b.user_id})" class="text-amber-600 hover:underline font-semibold text-xs">${b.is_active ? 'ระงับ' : 'เปิด'}</button>
+                        </td>
+                    </tr>
+                `;
+            });
+            document.getElementById('barber-table-body').innerHTML = barberRows;
+
+            // Render Services
+            let serviceRows = '';
+            services.forEach(s => {
+                serviceRows += `
+                    <tr class="hover:bg-slate-50">
+                        <td class="p-4 font-mono font-bold text-slate-600">#${s.service_id}</td>
+                        <td class="p-4 font-semibold text-slate-900">${s.service_name}</td>
                         <td class="p-4 font-bold text-slate-900">${s.base_price.toFixed(2)} ฿</td>
                         <td class="p-4">${s.is_active ? '<span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs font-semibold">เปิดให้บริการ</span>' : '<span class="bg-slate-200 text-slate-600 px-2 py-0.5 rounded-full text-xs">ปิดบริการ</span>'}</td>
                         <td class="p-4 text-center space-x-2">
@@ -309,97 +387,12 @@
             });
             document.getElementById('service-table-body').innerHTML = serviceRows;
 
-            // Render Transactions
-            let txRows = '';
-            transactions.forEach(t => {
-                txRows += `
-                    <tr class="hover:bg-slate-50">
-                        <td class="p-4 font-mono font-bold text-slate-600">#TXN-${t.transaction_id}</td>
-                        <td class="p-4 font-semibold text-slate-800">${t.barber_name}</td>
-                        <td class="p-4 text-slate-600">${t.service_name}</td>
-                        <td class="p-4"><span class="text-xs px-2 py-1 rounded font-medium ${t.payment_method === 'transfer' ? 'bg-sky-100 text-sky-700' : 'bg-emerald-100 text-emerald-700'}">${t.payment_method === 'transfer' ? 'โอนเงิน' : 'เงินสด'}</span></td>
-                        <td class="p-4 font-bold text-slate-900">฿${t.actual_price.toFixed(2)}</td>
-                        <td class="p-4 font-bold text-sky-600">฿${t.commission_amount.toFixed(2)}</td>
-                        <td class="p-4">${t.status === 'completed' ? '<span class="text-green-600 font-semibold text-xs">✓ ปกติ</span>' : '<span class="text-red-500 font-semibold text-xs">✕ โมฆะ (Void)</span>'}</td>
-                        <td class="p-4">${t.payout_status === 'settled' ? '<span class="bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded-full font-semibold">เคลียร์แล้ว</span>' : '<span class="bg-amber-100 text-amber-700 text-xs px-2 py-0.5 rounded-full font-semibold">รอเคลียร์</span>'}</td>
-                        <td class="p-4 text-center">
-                            ${t.status === 'completed' ? `<button onclick="voidBill(${t.transaction_id})" class="bg-red-50 hover:bg-red-100 text-red-600 px-3 py-1 rounded-lg text-xs font-bold border border-red-200">โมฆะบิล (Void)</button>` : '<span class="text-slate-400 text-xs">-</span>'}
-                        </td>
-                    </tr>
-                `;
-            });
-            document.getElementById('transaction-table-body').innerHTML = txRows;
-
-            // Render Settlements
+            fetchAndRenderTransactions();
             renderSettlements();
         }
 
-        async function renderSettlements() {
-            try {
-                const res = await fetch(ADMIN_PAYOUTS_URL);
-                const rawData = await res.json();
-                
-                // ถ้ามีข้อมูลเดียว n8n จะส่งมาเป็น Object (ไม่ใช่อาร์เรย์) เราต้องแปลงให้เป็น Array
-                let data = [];
-                if (rawData && Object.keys(rawData).length > 0) {
-                    data = Array.isArray(rawData) ? rawData : [rawData];
-                }
-                
-                let cardHTML = '';
-                
-                if(data.length === 0) {
-                    cardHTML = '<div class="col-span-1 md:col-span-2 text-center py-8 text-slate-500 font-bold">🎉 ไม่มีงานค้างเคลียร์ (ช่างทุกคนได้รับเงินครบถ้วนแล้ว)</div>';
-                } else {
-                    data.forEach(barber => {
-                        cardHTML += `
-                        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
-                            <div>
-                                <div class="flex justify-between items-center mb-3">
-                                    <span class="font-bold text-base text-slate-900">💈 ${barber.full_name}</span>
-                                    <span class="bg-amber-100 text-amber-800 text-xs px-2.5 py-1 rounded-full font-semibold">มียอดรอเคลียร์</span>
-                                </div>
-                                <div class="text-xs text-slate-500 space-y-1">
-                                    <div>จำนวนงานที่ยังไม่เคลียร์: <strong class="text-slate-800">${barber.total_jobs} หัว</strong></div>
-                                    <div>ยอดเงินรวมค่าบริการ: <strong class="text-slate-800">฿${parseFloat(barber.total_revenue).toFixed(2)}</strong></div>
-                                </div>
-                                <div class="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center">
-                                    <span class="text-xs text-slate-500 font-semibold">ยอดคอมมิชชันสุทธิ:</span>
-                                    <span class="text-xl font-bold text-emerald-600">฿${parseFloat(barber.total_commission).toFixed(2)}</span>
-                                </div>
-                            </div>
-                            <button onclick="executeSettlement(${barber.user_id}, '${barber.full_name}', ${barber.total_jobs}, ${barber.total_revenue}, ${barber.total_commission})" class="mt-5 w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl shadow-md transition text-sm">
-                                ยืนยันโอนเงินเคลียร์ยอดช่าง
-                            </button>
-                        </div>
-                        `;
-                    });
-                }
-                document.getElementById('pending-settlement-cards').innerHTML = cardHTML;
-            } catch (err) {
-                console.error(err);
-                document.getElementById('pending-settlement-cards').innerHTML = '<div class="text-red-500 text-sm font-bold">⚠️ ไม่สามารถเชื่อมต่อกับระบบฐานข้อมูลได้</div>';
-            }
-
-            // Render Payout History (Mock for now)
-            let payoutRows = '';
-            payouts.forEach(p => {
-                payoutRows += `
-                    <tr class="hover:bg-slate-50">
-                        <td class="p-4 font-mono font-bold text-slate-700">${p.payout_id}</td>
-                        <td class="p-4 font-semibold text-slate-900">${p.barber_name}</td>
-                        <td class="p-4 text-slate-500">${p.date_range}</td>
-                        <td class="p-4 font-bold text-slate-700">${p.total_jobs} หัว</td>
-                        <td class="p-4 font-bold text-emerald-600">฿${p.net_payout.toFixed(2)}</td>
-                        <td class="p-4"><span class="bg-green-100 text-green-700 px-2.5 py-0.5 rounded-full text-xs font-semibold">✓ จ่ายแล้ว (Paid)</span></td>
-                        <td class="p-4 text-center"><button onclick="Swal.fire({title:'หลักฐานสลิป', text:'โอนเงินเคลียร์ยอดสำเร็จ', icon:'info'})" class="text-sky-600 hover:underline font-semibold text-xs">🔍 ดูสลิป</button></td>
-                    </tr>
-                `;
-            });
-            document.getElementById('payout-table-body').innerHTML = payoutRows;
-        }
-
         // Void Bill Action
-        function voidBill(id) {
+        function voidBill(id, barberLineUid) {
             Swal.fire({
                 title: 'ยืนยันทำโมฆะบิล?',
                 text: `คุณต้องการยกเลิกบิล #TXN-${id} และปรับค่าคอมมิชชันเป็น 0 บาทหรือไม่?`,
@@ -409,14 +402,24 @@
                 cancelButtonColor: '#64748b',
                 confirmButtonText: 'ยืนยันยกเลิกบิล',
                 cancelButtonText: 'ยกเลิก'
-            }).then((result) => {
+            }).then(async (result) => {
                 if (result.isConfirmed) {
-                    const tx = transactions.find(t => t.transaction_id === id);
-                    if (tx) {
-                        tx.status = 'voided';
-                        tx.commission_amount = 0.00;
-                        renderData();
-                        Swal.fire('สำเร็จ', 'บิลถูกเปลี่ยนสถานะเป็นโมฆะเรียบร้อยแล้ว', 'success');
+                    Swal.fire({ title: 'กำลังบันทึก...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+                    try {
+                        let response = await fetch(ADMIN_VOID_URL, {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ transaction_id: id, barber_line_uid: barberLineUid })
+                        });
+                        if(response.ok) {
+                            fetchAndRenderTransactions();
+                            renderSettlements();
+                            Swal.fire('สำเร็จ', 'บิลถูกเปลี่ยนสถานะเป็นโมฆะเรียบร้อยแล้ว', 'success');
+                        } else {
+                            Swal.fire('Error', 'ไม่สามารถยกเลิกบิลได้', 'error');
+                        }
+                    } catch (error) {
+                        Swal.fire('Error', 'การเชื่อมต่อผิดพลาด', 'error');
                     }
                 }
             });
