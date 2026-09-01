@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="th">
 <head>
     <meta charset="UTF-8">
@@ -26,41 +26,41 @@
         <div class="flex-1 md:flex-none flex flex-col justify-center">
             <!-- Brand Logo (Hidden on mobile) -->
             <div class="hidden md:flex items-center gap-3 pb-6 border-b border-zinc-800">
-                <div class="bg-amber-500/20 text-amber-500 p-2.5 rounded-xl text-xl border border-amber-500/30">ðŸ’ˆ</div>
+                <div class="bg-amber-500/20 text-amber-500 p-2.5 rounded-xl text-xl border border-amber-500/30">💈</div>
                 <div>
                     <h1 class="font-bold text-base leading-tight text-white">Barber Admin</h1>
-                    <p class="text-xs text-amber-500/70">à¸£à¸°à¸šà¸šà¸šà¸£à¸´à¸«à¸²à¸£à¸ˆà¸±à¸”à¸à¸²à¸£à¸£à¹‰à¸²à¸™à¸•à¸±à¸”à¸œà¸¡</p>
+                    <p class="text-xs text-amber-500/70">ระบบบริหารจัดการร้านตัดผม</p>
                 </div>
             </div>
 
             <!-- Navigation Tabs -->
             <nav class="flex flex-row md:flex-col justify-around md:justify-start gap-1 md:space-y-1.5 text-sm w-full md:mt-6 overflow-x-auto no-scrollbar">
                 <button onclick="switchTab('dashboard')" id="tab-nav-dashboard" class="tab-btn active flex-1 md:w-full flex flex-col md:flex-row items-center justify-center md:justify-start gap-1 md:gap-3 p-2 md:px-4 md:py-3 rounded-xl text-center md:text-left text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 transition min-w-[70px]">
-                    <span class="text-xl md:text-base mb-0.5 md:mb-0">ðŸ“Š</span>
-                    <span class="text-[10px] md:text-sm font-medium whitespace-nowrap leading-tight">à¹à¸”à¸Šà¸šà¸­à¸£à¹Œà¸” <span class="hidden md:inline">(Dashboard)</span></span>
+                    <span class="text-xl md:text-base mb-0.5 md:mb-0">📊</span>
+                    <span class="text-[10px] md:text-sm font-medium whitespace-nowrap leading-tight">แดชบอร์ด <span class="hidden md:inline">(Dashboard)</span></span>
                 </button>
                 <button onclick="switchTab('barbers')" id="tab-nav-barbers" class="tab-btn flex-1 md:w-full flex flex-col md:flex-row items-center justify-center md:justify-start gap-1 md:gap-3 p-2 md:px-4 md:py-3 rounded-xl text-center md:text-left text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 transition min-w-[70px]">
-                    <span class="text-xl md:text-base mb-0.5 md:mb-0">âœ‚ï¸</span>
-                    <span class="text-[10px] md:text-sm font-medium whitespace-nowrap leading-tight">à¸Šà¹ˆà¸²à¸‡ <span class="hidden md:inline">(Barbers)</span></span>
+                    <span class="text-xl md:text-base mb-0.5 md:mb-0">✂️</span>
+                    <span class="text-[10px] md:text-sm font-medium whitespace-nowrap leading-tight">ช่าง <span class="hidden md:inline">(Barbers)</span></span>
                 </button>
                 <button onclick="switchTab('services')" id="tab-nav-services" class="tab-btn flex-1 md:w-full flex flex-col md:flex-row items-center justify-center md:justify-start gap-1 md:gap-3 p-2 md:px-4 md:py-3 rounded-xl text-center md:text-left text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 transition min-w-[70px]">
-                    <span class="text-xl md:text-base mb-0.5 md:mb-0">ðŸ·ï¸</span>
-                    <span class="text-[10px] md:text-sm font-medium whitespace-nowrap leading-tight">à¸šà¸£à¸´à¸à¸²à¸£ <span class="hidden md:inline">(Services)</span></span>
+                    <span class="text-xl md:text-base mb-0.5 md:mb-0">🏷️</span>
+                    <span class="text-[10px] md:text-sm font-medium whitespace-nowrap leading-tight">บริการ <span class="hidden md:inline">(Services)</span></span>
                 </button>
                 <button onclick="switchTab('transactions')" id="tab-nav-transactions" class="tab-btn flex-1 md:w-full flex flex-col md:flex-row items-center justify-center md:justify-start gap-1 md:gap-3 p-2 md:px-4 md:py-3 rounded-xl text-center md:text-left text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 transition min-w-[70px]">
-                    <span class="text-xl md:text-base mb-0.5 md:mb-0">ðŸ§¾</span>
-                    <span class="text-[10px] md:text-sm font-medium whitespace-nowrap leading-tight">à¸šà¸´à¸¥/à¹‚à¸¡à¸†à¸° <span class="hidden md:inline">(Transactions)</span></span>
+                    <span class="text-xl md:text-base mb-0.5 md:mb-0">🧾</span>
+                    <span class="text-[10px] md:text-sm font-medium whitespace-nowrap leading-tight">บิล/โมฆะ <span class="hidden md:inline">(Transactions)</span></span>
                 </button>
                 <button onclick="switchTab('settlements')" id="tab-nav-settlements" class="tab-btn flex-1 md:w-full flex flex-col md:flex-row items-center justify-center md:justify-start gap-1 md:gap-3 p-2 md:px-4 md:py-3 rounded-xl text-center md:text-left text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 transition min-w-[70px]">
-                    <span class="text-xl md:text-base mb-0.5 md:mb-0">ðŸ¤</span>
-                    <span class="text-[10px] md:text-sm font-medium whitespace-nowrap leading-tight">à¹€à¸„à¸¥à¸µà¸¢à¸£à¹Œà¹€à¸‡à¸´à¸™ <span class="hidden md:inline">(Payouts)</span></span>
+                    <span class="text-xl md:text-base mb-0.5 md:mb-0">🤝</span>
+                    <span class="text-[10px] md:text-sm font-medium whitespace-nowrap leading-tight">เคลียร์เงิน <span class="hidden md:inline">(Payouts)</span></span>
                 </button>
             </nav>
         </div>
 
         <!-- Footer Info (Hidden on mobile) -->
         <div class="hidden md:block pt-4 border-t border-zinc-800 text-xs text-zinc-500 text-center">
-            Barber Management v2.0 â€¢ Railway
+            Barber Management v2.0 • Railway
         </div>
     </aside>
 
@@ -68,9 +68,9 @@
     <main class="flex-1 flex flex-col overflow-y-auto order-1 md:order-2 pb-2 md:pb-0">
         <!-- Top Navbar -->
         <header class="h-16 bg-white border-b border-zinc-200 flex items-center justify-between px-4 md:px-8 sticky top-0 z-10 shrink-0">
-            <h2 id="page-title" class="font-bold text-base md:text-lg text-zinc-800 truncate pr-2">à¸ à¸²à¸žà¸£à¸§à¸¡à¸£à¸²à¸¢à¹„à¸”à¹‰ (Dashboard)</h2>
+            <h2 id="page-title" class="font-bold text-base md:text-lg text-zinc-800 truncate pr-2">ภาพรวมรายได้ (Dashboard)</h2>
             <div class="flex items-center gap-2 md:gap-4 shrink-0">
-                <span class="hidden md:inline-flex text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full font-medium">â— à¸£à¸°à¸šà¸šà¸­à¸­à¸™à¹„à¸¥à¸™à¹Œ (Live)</span>
+                <span class="hidden md:inline-flex text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full font-medium">● ระบบออนไลน์ (Live)</span>
                 <span class="inline-flex md:hidden text-xs bg-green-100 text-green-700 w-3 h-3 rounded-full"></span>
                 <span class="text-xs md:text-sm font-semibold text-zinc-700">Owner</span>
             </div>
@@ -83,27 +83,27 @@
             <section id="view-dashboard" class="space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div class="bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm border-l-4 border-l-green-500">
-                        <div class="text-xs font-semibold text-zinc-500">à¸£à¸²à¸¢à¸£à¸±à¸šà¸£à¸§à¸¡à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸” (à¹€à¸‡à¸´à¸™à¹€à¸‚à¹‰à¸²)</div>
-                        <div class="text-2xl font-bold text-zinc-900 mt-2" id="kpi-total-revenue">à¸¿45,800.00</div>
-                        <div class="text-xs text-zinc-400 mt-1">à¸ˆà¸²à¸à¸šà¸´à¸¥à¸—à¸µà¹ˆà¸Šà¸³à¸£à¸°à¸ªà¸³à¹€à¸£à¹‡à¸ˆà¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”</div>
+                        <div class="text-xs font-semibold text-zinc-500">รายรับรวมทั้งหมด (เงินเข้า)</div>
+                        <div class="text-2xl font-bold text-zinc-900 mt-2" id="kpi-total-revenue">฿0.00</div>
+                        <div class="text-xs text-zinc-400 mt-1">จากบิลที่ชำระสำเร็จทั้งหมด</div>
                     </div>
                     <div class="bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm border-l-4 border-l-amber-500">
-                        <div class="text-xs font-semibold text-zinc-500">à¸¢à¸­à¸”à¸ˆà¹ˆà¸²à¸¢à¸„à¹ˆà¸²à¸„à¸­à¸¡à¸¡à¸´à¸Šà¸Šà¸±à¸™à¸Šà¹ˆà¸²à¸‡ (à¹€à¸‡à¸´à¸™à¸­à¸­à¸)</div>
-                        <div class="text-2xl font-bold text-amber-600 mt-2" id="kpi-total-payouts">à¸¿22,900.00</div>
-                        <div class="text-xs text-zinc-400 mt-1">à¸¢à¸­à¸”à¹‚à¸­à¸™à¹€à¸„à¸¥à¸µà¸¢à¸£à¹Œà¹€à¸‡à¸´à¸™à¹ƒà¸«à¹‰à¸Šà¹ˆà¸²à¸‡à¹à¸¥à¹‰à¸§</div>
+                        <div class="text-xs font-semibold text-zinc-500">ยอดจ่ายค่าคอมมิชชันช่าง (เงินออก)</div>
+                        <div class="text-2xl font-bold text-amber-600 mt-2" id="kpi-total-payouts">฿0.00</div>
+                        <div class="text-xs text-zinc-400 mt-1">ยอดโอนเคลียร์เงินให้ช่างแล้ว</div>
                     </div>
                     <div class="bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm border-l-4 border-l-amber-500">
-                        <div class="text-xs font-semibold text-zinc-500">à¸£à¸²à¸¢à¹„à¸”à¹‰à¸ªà¸¸à¸—à¸˜à¸´à¸‚à¸­à¸‡à¸£à¹‰à¸²à¸™ (Net Income)</div>
-                        <div class="text-2xl font-bold text-amber-600 mt-2" id="kpi-net-income">à¸¿22,900.00</div>
-                        <div class="text-xs text-zinc-400 mt-1">à¸£à¸²à¸¢à¸£à¸±à¸šà¸«à¸±à¸à¸ªà¹ˆà¸§à¸™à¹à¸šà¹ˆà¸‡à¸Šà¹ˆà¸²à¸‡</div>
+                        <div class="text-xs font-semibold text-zinc-500">รายได้สุทธิของร้าน (Net Income)</div>
+                        <div class="text-2xl font-bold text-amber-600 mt-2" id="kpi-net-income">฿0.00</div>
+                        <div class="text-xs text-zinc-400 mt-1">รายรับหักส่วนแบ่งช่าง</div>
                     </div>
                 </div>
 
                 <div class="bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm">
-                    <h3 class="font-bold text-base text-zinc-800 mb-4">ðŸš€ à¸¥à¸´à¸‡à¸à¹Œà¹€à¸Šà¸·à¹ˆà¸­à¸¡à¸•à¹ˆà¸­à¹„à¸›à¸¢à¸±à¸‡ Looker Studio Dashboard</h3>
-                    <p class="text-sm text-zinc-600 mb-4">à¸ªà¸²à¸¡à¸²à¸£à¸–à¹€à¸›à¸´à¸”à¸”à¸¹à¸£à¸²à¸¢à¸‡à¸²à¸™à¸ªà¸–à¸´à¸•à¸´à¸‚à¸±à¹‰à¸™à¸ªà¸¹à¸‡ à¸à¸£à¸²à¸Ÿà¹€à¸›à¸£à¸µà¸¢à¸šà¹€à¸—à¸µà¸¢à¸šà¸œà¸¥à¸‡à¸²à¸™à¸Šà¹ˆà¸²à¸‡ à¹à¸¥à¸°à¹à¸™à¸§à¹‚à¸™à¹‰à¸¡à¸£à¸²à¸¢à¹„à¸”à¹‰à¹à¸šà¸šà¹€à¸£à¸µà¸¢à¸¥à¹„à¸—à¸¡à¹Œà¹„à¸”à¹‰à¸—à¸µà¹ˆà¸™à¸µà¹ˆ</p>
+                    <h3 class="font-bold text-base text-zinc-800 mb-4">🚀 ลิงก์เชื่อมต่อไปยัง Looker Studio Dashboard</h3>
+                    <p class="text-sm text-zinc-600 mb-4">สามารถเปิดดูรายงานสถิติขั้นสูง กราฟเปรียบเทียบผลงานช่าง และแนวโน้มรายได้แบบเรียลไทม์ได้ที่นี่</p>
                     <a href="https://lookerstudio.google.com" target="_blank" class="inline-flex items-center gap-2 bg-amber-600 hover:bg-amber-700 text-white px-5 py-2.5 rounded-xl font-semibold text-sm shadow-md transition">
-                        <span>ðŸ“Š à¹€à¸›à¸´à¸” Looker Studio à¹à¸”à¸Šà¸šà¸­à¸£à¹Œà¸”à¸‰à¸šà¸±à¸šà¹€à¸•à¹‡à¸¡</span>
+                        <span>📊 เปิด Looker Studio แดชบอร์ดฉบับเต็ม</span>
                     </a>
                 </div>
             </section>
@@ -111,21 +111,17 @@
             <!-- TAB 2: BARBERS CRUD -->
             <section id="view-barbers" class="hidden space-y-6">
                 <div class="flex justify-between items-center">
-                    <h3 class="font-bold text-base text-zinc-800">à¸£à¸²à¸¢à¸Šà¸·à¹ˆà¸­à¸Šà¹ˆà¸²à¸‡à¸•à¸±à¸”à¸œà¸¡à¹ƒà¸™à¸£à¸°à¸šà¸š (Users Management)</h3>
-                    <button onclick="openAddBarberModal()" class="bg-zinc-900 hover:bg-zinc-800 text-white text-sm font-semibold px-4 py-2.5 rounded-xl shadow-sm transition">
-                        + à¹€à¸žà¸´à¹ˆà¸¡à¸Šà¹ˆà¸²à¸‡à¹ƒà¸«à¸¡à¹ˆ
-                    </button>
+                    <h3 class="font-bold text-base text-zinc-800">รายชื่อช่างตัดผมในระบบ (Users Management)</h3>
                 </div>
                 <div class="bg-white rounded-2xl border border-zinc-200 overflow-x-auto shadow-sm">
                     <table class="w-full text-left text-sm">
                         <thead class="bg-zinc-100 text-zinc-600 text-xs font-semibold uppercase">
                             <tr>
-                                <th class="p-4">à¸£à¸«à¸±à¸ªà¸Šà¹ˆà¸²à¸‡ (ID)</th>
-                                <th class="p-4">à¸Šà¸·à¹ˆà¸­-à¸™à¸²à¸¡à¸ªà¸à¸¸à¸¥</th>
-                                <th class="p-4">à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡</th>
-                                <th class="p-4">à¸ªà¹ˆà¸§à¸™à¹à¸šà¹ˆà¸‡à¸„à¸­à¸¡à¸¡à¸´à¸Šà¸Šà¸±à¸™ (%)</th>
-                                <th class="p-4">à¸ªà¸–à¸²à¸™à¸°</th>
-                                <th class="p-4 text-center">à¸ˆà¸±à¸”à¸à¸²à¸£ (CRUD)</th>
+                                <th class="p-4">รหัสช่าง (ID)</th>
+                                <th class="p-4">ชื่อ-นามสกุล</th>
+                                <th class="p-4">ตำแหน่ง</th>
+                                <th class="p-4">ส่วนแบ่งคอมมิชชัน (%)</th>
+                                <th class="p-4">สถานะ</th>
                             </tr>
                         </thead>
                         <tbody id="barber-table-body" class="divide-y divide-zinc-100">
@@ -138,20 +134,16 @@
             <!-- TAB 3: SERVICES CRUD -->
             <section id="view-services" class="hidden space-y-6">
                 <div class="flex justify-between items-center">
-                    <h3 class="font-bold text-base text-zinc-800">à¸£à¸²à¸¢à¸à¸²à¸£à¸šà¸£à¸´à¸à¸²à¸£à¹à¸¥à¸°à¸£à¸²à¸„à¸² (Services Management)</h3>
-                    <button onclick="openAddServiceModal()" class="bg-zinc-900 hover:bg-zinc-800 text-white text-sm font-semibold px-4 py-2.5 rounded-xl shadow-sm transition">
-                        + à¹€à¸žà¸´à¹ˆà¸¡à¸šà¸£à¸´à¸à¸²à¸£à¹ƒà¸«à¸¡à¹ˆ
-                    </button>
+                    <h3 class="font-bold text-base text-zinc-800">รายการบริการและราคา (Services Management)</h3>
                 </div>
                 <div class="bg-white rounded-2xl border border-zinc-200 overflow-x-auto shadow-sm">
                     <table class="w-full text-left text-sm">
                         <thead class="bg-zinc-100 text-zinc-600 text-xs font-semibold uppercase">
                             <tr>
-                                <th class="p-4">à¸£à¸«à¸±à¸ªà¸šà¸£à¸´à¸à¸²à¸£ (ID)</th>
-                                <th class="p-4">à¸Šà¸·à¹ˆà¸­à¸›à¸£à¸°à¹€à¸ à¸—à¸šà¸£à¸´à¸à¸²à¸£</th>
-                                <th class="p-4">à¸£à¸²à¸„à¸²à¸¡à¸²à¸•à¸£à¸à¸²à¸™ (à¸šà¸²à¸—)</th>
-                                <th class="p-4">à¸ªà¸–à¸²à¸™à¸°à¸à¸²à¸£à¹ƒà¸«à¹‰à¸šà¸£à¸´à¸à¸²à¸£</th>
-                                <th class="p-4 text-center">à¸ˆà¸±à¸”à¸à¸²à¸£ (CRUD)</th>
+                                <th class="p-4">รหัสบริการ (ID)</th>
+                                <th class="p-4">ชื่อประเภทบริการ</th>
+                                <th class="p-4">ราคามาตรฐาน (บาท)</th>
+                                <th class="p-4">สถานะการให้บริการ</th>
                             </tr>
                         </thead>
                         <tbody id="service-table-body" class="divide-y divide-zinc-100">
@@ -164,21 +156,21 @@
             <!-- TAB 4: TRANSACTIONS & VOID BILL -->
             <section id="view-transactions" class="hidden space-y-6">
                 <div class="flex justify-between items-center">
-                    <h3 class="font-bold text-base text-zinc-800">à¸›à¸£à¸°à¸§à¸±à¸•à¸´à¸à¸²à¸£à¸Šà¸³à¸£à¸°à¹€à¸‡à¸´à¸™à¹à¸¥à¸°à¸˜à¸¸à¸£à¸à¸£à¸£à¸¡ (Transactions)</h3>
+                    <h3 class="font-bold text-base text-zinc-800">ประวัติการชำระเงินและธุรกรรม (Transactions)</h3>
                 </div>
                 <div class="bg-white rounded-2xl border border-zinc-200 overflow-x-auto shadow-sm">
                     <table class="w-full text-left text-sm">
                         <thead class="bg-zinc-100 text-zinc-600 text-xs font-semibold uppercase">
                             <tr>
-                                <th class="p-4">à¸£à¸«à¸±à¸ªà¸šà¸´à¸¥</th>
-                                <th class="p-4">à¸Šà¹ˆà¸²à¸‡à¸œà¸¹à¹‰à¹ƒà¸«à¹‰à¸šà¸£à¸´à¸à¸²à¸£</th>
-                                <th class="p-4">à¸šà¸£à¸´à¸à¸²à¸£</th>
-                                <th class="p-4">à¸§à¸´à¸˜à¸µà¸Šà¸³à¸£à¸°</th>
-                                <th class="p-4">à¸¢à¸­à¸”à¹€à¸‡à¸´à¸™</th>
-                                <th class="p-4">à¸„à¹ˆà¸²à¸„à¸­à¸¡à¸Šà¹ˆà¸²à¸‡</th>
-                                <th class="p-4">à¸ªà¸–à¸²à¸™à¸°à¸šà¸´à¸¥</th>
-                                <th class="p-4">à¸ªà¸–à¸²à¸™à¸°à¹€à¸„à¸¥à¸µà¸¢à¸£à¹Œà¹€à¸‡à¸´à¸™</th>
-                                <th class="p-4 text-center">à¸ˆà¸±à¸”à¸à¸²à¸£</th>
+                                <th class="p-4">รหัสบิล</th>
+                                <th class="p-4">ช่างผู้ให้บริการ</th>
+                                <th class="p-4">บริการ</th>
+                                <th class="p-4">วิธีชำระ</th>
+                                <th class="p-4">ยอดเงิน</th>
+                                <th class="p-4">ค่าคอมช่าง</th>
+                                <th class="p-4">สถานะบิล</th>
+                                <th class="p-4">สถานะเคลียร์เงิน</th>
+                                <th class="p-4 text-center">จัดการ</th>
                             </tr>
                         </thead>
                         <tbody id="transaction-table-body" class="divide-y divide-zinc-100">
@@ -192,44 +184,19 @@
             <section id="view-settlements" class="hidden space-y-6">
                 <div class="flex justify-between items-center">
                     <div>
-                        <h3 class="font-bold text-base text-zinc-800">à¸£à¸°à¸šà¸šà¸•à¸±à¸”à¸£à¸­à¸šà¹€à¸„à¸¥à¸µà¸¢à¸£à¹Œà¹€à¸‡à¸´à¸™à¸„à¹ˆà¸²à¸„à¸­à¸¡à¸¡à¸´à¸Šà¸Šà¸±à¸™à¸Šà¹ˆà¸²à¸‡ (Barber Payouts)</h3>
-                        <p class="text-xs text-zinc-500">à¸ªà¸£à¸¸à¸›à¸¢à¸­à¸”à¸‡à¸²à¸™à¸—à¸µà¹ˆà¸„à¹‰à¸²à¸‡à¹€à¸„à¸¥à¸µà¸¢à¸£à¹Œ (Unsettled) à¹à¸¥à¸°à¸šà¸±à¸™à¸—à¸¶à¸à¸«à¸¥à¸±à¸à¸à¸²à¸™à¸à¸²à¸£à¹‚à¸­à¸™à¹€à¸‡à¸´à¸™à¸ˆà¹ˆà¸²à¸¢à¸Šà¹ˆà¸²à¸‡</p>
+                        <h3 class="font-bold text-base text-zinc-800">ระบบตัดรอบเคลียร์เงินค่าคอมมิชชันช่าง (Barber Payouts)</h3>
+                        <p class="text-xs text-zinc-500">สรุปยอดงานที่ค้างเคลียร์ (Unsettled) และบันทึกหลักฐานการโอนเงินจ่ายช่าง</p>
                     </div>
                 </div>
 
-                <!-- Pending Settlement Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="pending-settlement-cards">
                     <!-- Populated by JS -->
                 </div>
-
-                <!-- Payout History Table -->
-                <div class="bg-white rounded-2xl border border-zinc-200 overflow-x-auto shadow-sm mt-6">
-                    <div class="p-4 bg-zinc-50 border-b border-zinc-200 font-bold text-sm text-zinc-700">
-                        ðŸ“‹ à¸›à¸£à¸°à¸§à¸±à¸•à¸´à¸à¸²à¸£à¸•à¸±à¸”à¸£à¸­à¸šà¹€à¸„à¸¥à¸µà¸¢à¸£à¹Œà¹€à¸‡à¸´à¸™à¸—à¸µà¹ˆà¸œà¹ˆà¸²à¸™à¸¡à¸² (Payout History)
-                    </div>
-                    <table class="w-full text-left text-sm">
-                        <thead class="bg-zinc-100 text-zinc-600 text-xs font-semibold uppercase">
-                            <tr>
-                                <th class="p-4">à¸£à¸«à¸±à¸ªà¸£à¸­à¸š</th>
-                                <th class="p-4">à¸Šà¸·à¹ˆà¸­à¸Šà¹ˆà¸²à¸‡</th>
-                                <th class="p-4">à¸Šà¹ˆà¸§à¸‡à¸§à¸±à¸™à¸—à¸µà¹ˆ</th>
-                                <th class="p-4">à¸ˆà¸³à¸™à¸§à¸™à¸‡à¸²à¸™</th>
-                                <th class="p-4">à¸¢à¸­à¸”à¹€à¸‡à¸´à¸™à¹‚à¸­à¸™à¹€à¸„à¸¥à¸µà¸¢à¸£à¹Œ</th>
-                                <th class="p-4">à¸ªà¸–à¸²à¸™à¸°</th>
-                                <th class="p-4 text-center">à¸«à¸¥à¸±à¸à¸à¸²à¸™à¸ªà¸¥à¸´à¸›</th>
-                            </tr>
-                        </thead>
-                        <tbody id="payout-table-body" class="divide-y divide-zinc-100">
-                            <!-- Populated by JS -->
-                        </tbody>
-                    </table>
-                </div>
             </section>
-
         </div>
     </main>
 
-        <script>
+    <script>
         // ==========================================================
         // Mock / Live API Configuration
         // ==========================================================
@@ -264,8 +231,8 @@
         function switchTab(tabId) {
             document.querySelectorAll('main section').forEach(sec => sec.classList.add('hidden'));
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById(iew- + tabId).classList.remove('hidden');
-            document.getElementById(	ab-nav- + tabId).classList.add('active');
+            document.getElementById('view-' + tabId).classList.remove('hidden');
+            document.getElementById('tab-nav-' + tabId).classList.add('active');
 
             const titles = {
                 dashboard: 'ภาพรวมรายได้ (Dashboard)',
@@ -281,30 +248,28 @@
             let barberRows = '';
             barbers.forEach(b => {
                 const isActive = b.is_active !== undefined ? b.is_active : 1;
-                barberRows += <tr class="hover:bg-zinc-50">
-                    <td class="p-4 font-mono font-bold text-zinc-600"># + b.user_id + </td>
-                    <td class="p-4 font-semibold text-zinc-900"> + b.full_name + </td>
-                    <td class="p-4 text-zinc-500"> + (b.role || 'ช่างตัดผม') + </td>
-                    <td class="p-4 font-bold text-amber-600"> + (b.commission_rate || 50) + %</td>
-                    <td class="p-4"> + (isActive ? '<span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs font-semibold">เปิดใช้งาน</span>' : '<span class="bg-zinc-200 text-zinc-600 px-2 py-0.5 rounded-full text-xs">ปิด</span>') + </td>
-                    <td class="p-4 text-center space-x-2 whitespace-nowrap"><span class="text-zinc-400 text-xs">-</span></td>
-                </tr>;
+                barberRows += `<tr class="hover:bg-zinc-50">
+                    <td class="p-4 font-mono font-bold text-zinc-600">#${b.user_id}</td>
+                    <td class="p-4 font-semibold text-zinc-900">${b.full_name}</td>
+                    <td class="p-4 text-zinc-500">${b.role || 'ช่างตัดผม'}</td>
+                    <td class="p-4 font-bold text-amber-600">${b.commission_rate || 50}%</td>
+                    <td class="p-4">${isActive ? '<span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs font-semibold">เปิดใช้งาน</span>' : '<span class="bg-zinc-200 text-zinc-600 px-2 py-0.5 rounded-full text-xs">ปิด</span>'}</td>
+                </tr>`;
             });
-            if(barbers.length === 0) barberRows = '<tr><td colspan="6" class="p-6 text-center text-zinc-500">ไม่มีข้อมูลช่าง</td></tr>';
+            if(barbers.length === 0) barberRows = '<tr><td colspan="5" class="p-6 text-center text-zinc-500">ไม่มีข้อมูลช่าง</td></tr>';
             document.getElementById('barber-table-body').innerHTML = barberRows;
 
             let serviceRows = '';
             services.forEach(s => {
                 const isActive = s.is_active !== undefined ? s.is_active : 1;
-                serviceRows += <tr class="hover:bg-zinc-50">
-                    <td class="p-4 font-mono font-bold text-zinc-600"># + s.service_id + </td>
-                    <td class="p-4 font-semibold text-zinc-900"> + s.service_name + </td>
-                    <td class="p-4 font-bold text-zinc-900"> + parseFloat(s.base_price).toFixed(2) +  ฿</td>
-                    <td class="p-4"> + (isActive ? '<span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs font-semibold">เปิดให้บริการ</span>' : '<span class="bg-zinc-200 text-zinc-600 px-2 py-0.5 rounded-full text-xs">ปิดบริการ</span>') + </td>
-                    <td class="p-4 text-center space-x-2 whitespace-nowrap"><span class="text-zinc-400 text-xs">-</span></td>
-                </tr>;
+                serviceRows += `<tr class="hover:bg-zinc-50">
+                    <td class="p-4 font-mono font-bold text-zinc-600">#${s.service_id}</td>
+                    <td class="p-4 font-semibold text-zinc-900">${s.service_name}</td>
+                    <td class="p-4 font-bold text-zinc-900">${parseFloat(s.base_price).toFixed(2)} ฿</td>
+                    <td class="p-4">${isActive ? '<span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs font-semibold">เปิดให้บริการ</span>' : '<span class="bg-zinc-200 text-zinc-600 px-2 py-0.5 rounded-full text-xs">ปิดบริการ</span>'}</td>
+                </tr>`;
             });
-            if(services.length === 0) serviceRows = '<tr><td colspan="5" class="p-6 text-center text-zinc-500">ไม่มีข้อมูลบริการ</td></tr>';
+            if(services.length === 0) serviceRows = '<tr><td colspan="4" class="p-6 text-center text-zinc-500">ไม่มีข้อมูลบริการ</td></tr>';
             document.getElementById('service-table-body').innerHTML = serviceRows;
         }
 
@@ -315,7 +280,7 @@
                 let txData = [];
                 if (rawData && Object.keys(rawData).length > 0) {
                     txData = Array.isArray(rawData) ? rawData : [rawData];
-                    txData = txData.map(x => x.json || x); // Unwrap n8n json
+                    txData = txData.map(x => x.json || x);
                 }
                 
                 let totalRev = 0;
@@ -329,24 +294,23 @@
                             totalRev += parseFloat(t.actual_price || 0);
                             totalComm += parseFloat(t.commission_amount || 0);
                         }
-                        txRows += <tr class="hover:bg-zinc-50">
-                                <td class="p-4 font-mono font-bold text-zinc-600">#TXN- + (t.transaction_id || '-') + </td>
-                                <td class="p-4 font-semibold text-zinc-800"> + (t.barber_name || '-') + </td>
-                                <td class="p-4 text-zinc-600"> + (t.service_name || '-') + </td>
-                                <td class="p-4"><span class="text-xs px-2 py-1 rounded font-medium  + (t.payment_method === 'transfer' ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700') + "> + (t.payment_method === 'transfer' ? 'โอนเงิน' : 'เงินสด') + </span></td>
-                                <td class="p-4 font-bold text-zinc-900">฿ + parseFloat(t.actual_price || 0).toFixed(2) + </td>
-                                <td class="p-4 font-bold text-amber-600">฿ + parseFloat(t.commission_amount || 0).toFixed(2) + </td>
-                                <td class="p-4"> + (t.status === 'completed' ? '<span class="text-green-600 font-semibold text-xs">✓ ปกติ</span>' : '<span class="text-red-500 font-semibold text-xs">✕ โมฆะ (Void)</span>') + </td>
-                                <td class="p-4"> + (t.payout_status === 'settled' ? '<span class="bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded-full font-semibold">เคลียร์แล้ว</span>' : '<span class="bg-amber-100 text-amber-700 text-xs px-2 py-0.5 rounded-full font-semibold">รอเคลียร์</span>') + </td>
+                        txRows += `<tr class="hover:bg-zinc-50">
+                                <td class="p-4 font-mono font-bold text-zinc-600">#TXN-${t.transaction_id || '-'}</td>
+                                <td class="p-4 font-semibold text-zinc-800">${t.barber_name || '-'}</td>
+                                <td class="p-4 text-zinc-600">${t.service_name || '-'}</td>
+                                <td class="p-4"><span class="text-xs px-2 py-1 rounded font-medium ${t.payment_method === 'transfer' ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700'}">${t.payment_method === 'transfer' ? 'โอนเงิน' : 'เงินสด'}</span></td>
+                                <td class="p-4 font-bold text-zinc-900">฿${parseFloat(t.actual_price || 0).toFixed(2)}</td>
+                                <td class="p-4 font-bold text-amber-600">฿${parseFloat(t.commission_amount || 0).toFixed(2)}</td>
+                                <td class="p-4">${t.status === 'completed' ? '<span class="text-green-600 font-semibold text-xs">✓ ปกติ</span>' : '<span class="text-red-500 font-semibold text-xs">✕ โมฆะ (Void)</span>'}</td>
+                                <td class="p-4">${t.payout_status === 'settled' ? '<span class="bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded-full font-semibold">เคลียร์แล้ว</span>' : '<span class="bg-amber-100 text-amber-700 text-xs px-2 py-0.5 rounded-full font-semibold">รอเคลียร์</span>'}</td>
                                 <td class="p-4 text-center">
-                                     + (t.status === 'completed' ? <button onclick="voidBill( + t.transaction_id + , ' + t.barber_line_uid + ')" class="bg-red-50 hover:bg-red-100 text-red-600 px-3 py-1 rounded-lg text-xs font-bold border border-red-200">โมฆะบิล</button> : '<span class="text-zinc-400 text-xs">-</span>') + 
+                                    ${t.status === 'completed' ? `<button onclick="voidBill(${t.transaction_id}, '${t.barber_line_uid}')" class="bg-red-50 hover:bg-red-100 text-red-600 px-3 py-1 rounded-lg text-xs font-bold border border-red-200">โมฆะบิล</button>` : '<span class="text-zinc-400 text-xs">-</span>'}
                                 </td>
-                            </tr>;
+                            </tr>`;
                     });
                 }
                 document.getElementById('transaction-table-body').innerHTML = txRows;
                 
-                // Update Dashboard
                 document.getElementById('kpi-total-revenue').innerText = '฿' + totalRev.toFixed(2);
                 document.getElementById('kpi-total-payouts').innerText = '฿' + totalComm.toFixed(2);
                 document.getElementById('kpi-net-income').innerText = '฿' + (totalRev - totalComm).toFixed(2);
@@ -372,19 +336,19 @@
                     cards = '<div class="col-span-full p-6 text-center text-zinc-500 bg-white rounded-xl border border-zinc-200">ไม่มีรายการค้างเคลียร์ 🎉</div>';
                 } else {
                     pData.forEach(p => {
-                        cards += <div class="bg-white p-5 rounded-2xl border border-amber-200 shadow-sm flex flex-col justify-between">
+                        cards += `<div class="bg-white p-5 rounded-2xl border border-amber-200 shadow-sm flex flex-col justify-between">
                             <div>
                                 <div class="flex justify-between items-start mb-2">
-                                    <h4 class="font-bold text-lg text-zinc-900"> + p.full_name + </h4>
-                                    <span class="bg-amber-100 text-amber-700 text-xs px-2 py-1 rounded-full font-bold">รอเคลียร์  + p.total_jobs +  งาน</span>
+                                    <h4 class="font-bold text-lg text-zinc-900">${p.full_name}</h4>
+                                    <span class="bg-amber-100 text-amber-700 text-xs px-2 py-1 rounded-full font-bold">รอเคลียร์ ${p.total_jobs} งาน</span>
                                 </div>
                                 <div class="text-sm text-zinc-500 mb-4">ยอดเงินที่ต้องโอนให้ช่าง:</div>
-                                <div class="text-3xl font-bold text-amber-600 mb-4">฿ + parseFloat(p.total_commission || 0).toFixed(2) + </div>
+                                <div class="text-3xl font-bold text-amber-600 mb-4">฿${parseFloat(p.total_commission || 0).toFixed(2)}</div>
                             </div>
-                            <button onclick="executeSettlement( + p.user_id + , ' + p.full_name + ',  + p.total_jobs + ,  + p.total_revenue + ,  + p.total_commission + )" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl transition">
+                            <button onclick="executeSettlement(${p.user_id}, '${p.full_name}', ${p.total_jobs}, ${p.total_revenue}, ${p.total_commission})" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl transition">
                                 💸 ยืนยันโอนเงิน & แจ้งเตือน
                             </button>
-                        </div>;
+                        </div>`;
                     });
                 }
                 document.getElementById('pending-settlement-cards').innerHTML = cards;
@@ -454,4 +418,3 @@
     </script>
 </body>
 </html>
-
