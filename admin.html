@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barber Shop Admin Backoffice (CRUD & Settlement)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Prompt', sans-serif;
+            background-color: #f1f5f9;
+        }
+        .tab-btn.active {
+            background-color: #0284c7;
+            color: white;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="text-slate-800 flex h-screen overflow-hidden">
+
+    <!-- Sidebar Navigation -->
+    <aside class="w-64 bg-slate-900 text-white flex flex-col justify-between p-5 select-none shrink-0">
+        <div>
+            <!-- Brand Logo -->
+            <div class="flex items-center gap-3 pb-6 border-b border-slate-800">
+                <div class="bg-sky-500/20 text-sky-400 p-2.5 rounded-xl text-xl">💈</div>
+                <div>
+                    <h1 class="font-bold text-base leading-tight text-white">Barber Admin</h1>
+                    <p class="text-xs text-slate-400">ระบบบริหารจัดการร้านตัดผม</p>
+                </div>
+            </div>
+
+            <!-- Navigation Tabs -->
+            <nav class="mt-6 space-y-1.5 text-sm">
+                <button onclick="switchTab('dashboard')" id="tab-nav-dashboard" class="tab-btn active w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-slate-300 hover:bg-slate-800 transition">
+                    <span>📊</span><span>ภาพรวมรายได้ (Dashboard)</span>
+                </button>
+                <button onclick="switchTab('barbers')" id="tab-nav-barbers" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-slate-300 hover:bg-slate-800 transition">
+                    <span>✂️</span><span>จัดการช่าง (Barbers CRUD)</span>
+                </button>
+                <button onclick="switchTab('services')" id="tab-nav-services" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-slate-300 hover:bg-slate-800 transition">
+                    <span>🏷️</span><span>จัดการบริการ (Services CRUD)</span>
+                </button>
+                <button onclick="switchTab('transactions')" id="tab-nav-transactions" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-slate-300 hover:bg-slate-800 transition">
+                    <span>🧾</span><span>ประวัติบิล / โมฆะบิล (Void Bill)</span>
+                </button>
+                <button onclick="switchTab('settlements')" id="tab-nav-settlements" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-slate-300 hover:bg-slate-800 transition">
+                    <span>🤝</span><span>ตัดรอบเคลียร์เงินช่าง (Payouts)</span>
+                </button>
+            </nav>
+        </div>
+
+        <!-- Footer Info -->
+        <div class="pt-4 border-t border-slate-800 text-xs text-slate-500 text-center">
+            Barber Management v2.0 • Railway MySQL
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col overflow-y-auto">
+        <!-- Top Navbar -->
+        <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-8 sticky top-0 z-10">
+            <h2 id="page-title" class="font-bold text-lg text-slate-800">ภาพรวมรายได้ (Dashboard)</h2>
+            <div class="flex items-center gap-4">
+                <span class="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full font-medium">● ระบบออนไลน์ (Live)</span>
+                <span class="text-sm font-semibold text-slate-700">ผู้ดูแลระบบ (Owner)</span>
+            </div>
+        </header>
+
+        <!-- Dynamic Content Body -->
+        <div class="p-8 space-y-6">
+
+            <!-- TAB 1: DASHBOARD -->
+            <section id="view-dashboard" class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm border-l-4 border-l-green-500">
+                        <div class="text-xs font-semibold text-slate-500">รายรับรวมทั้งหมด (เงินเข้า)</div>
+                        <div class="text-2xl font-bold text-slate-900 mt-2" id="kpi-total-revenue">฿45,800.00</div>
+                        <div class="text-xs text-slate-400 mt-1">จากบิลที่ชำระสำเร็จทั้งหมด</div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm border-l-4 border-l-sky-500">
+                        <div class="text-xs font-semibold text-slate-500">ยอดจ่ายค่าคอมมิชชันช่าง (เงินออก)</div>
+                        <div class="text-2xl font-bold text-sky-600 mt-2" id="kpi-total-payouts">฿22,900.00</div>
+                        <div class="text-xs text-slate-400 mt-1">ยอดโอนเคลียร์เงินให้ช่างแล้ว</div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm border-l-4 border-l-amber-500">
+                        <div class="text-xs font-semibold text-slate-500">รายได้สุทธิของร้าน (Net Income)</div>
+                        <div class="text-2xl font-bold text-amber-600 mt-2" id="kpi-net-income">฿22,900.00</div>
+                        <div class="text-xs text-slate-400 mt-1">รายรับหักส่วนแบ่งช่าง</div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                    <h3 class="font-bold text-base text-slate-800 mb-4">🚀 ลิงก์เชื่อมต่อไปยัง Looker Studio Dashboard</h3>
+                    <p class="text-sm text-slate-600 mb-4">สามารถเปิดดูรายงานสถิติขั้นสูง กราฟเปรียบเทียบผลงานช่าง และแนวโน้มรายได้แบบเรียลไทม์ได้ที่นี่</p>
+                    <a href="https://lookerstudio.google.com" target="_blank" class="inline-flex items-center gap-2 bg-sky-600 hover:bg-sky-700 text-white px-5 py-2.5 rounded-xl font-semibold text-sm shadow-md transition">
+                        <span>📊 เปิด Looker Studio แดชบอร์ดฉบับเต็ม</span>
+                    </a>
+                </div>
+            </section>
+
+            <!-- TAB 2: BARBERS CRUD -->
+            <section id="view-barbers" class="hidden space-y-6">
+                <div class="flex justify-between items-center">
+                    <h3 class="font-bold text-base text-slate-800">รายชื่อช่างตัดผมในระบบ (Users Management)</h3>
+                    <button onclick="openAddBarberModal()" class="bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold px-4 py-2.5 rounded-xl shadow-sm transition">
+                        + เพิ่มช่างใหม่
+                    </button>
+                </div>
+                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-slate-100 text-slate-600 text-xs font-semibold uppercase">
+                            <tr>
+                                <th class="p-4">รหัสช่าง (ID)</th>
+                                <th class="p-4">ชื่อ-นามสกุล</th>
+                                <th class="p-4">ตำแหน่ง</th>
+                                <th class="p-4">ส่วนแบ่งคอมมิชชัน (%)</th>
+                                <th class="p-4">สถานะ</th>
+                                <th class="p-4 text-center">จัดการ (CRUD)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="barber-table-body" class="divide-y divide-slate-100">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- TAB 3: SERVICES CRUD -->
+            <section id="view-services" class="hidden space-y-6">
+                <div class="flex justify-between items-center">
+                    <h3 class="font-bold text-base text-slate-800">รายการบริการและราคา (Services Management)</h3>
+                    <button onclick="openAddServiceModal()" class="bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold px-4 py-2.5 rounded-xl shadow-sm transition">
+                        + เพิ่มบริการใหม่
+                    </button>
+                </div>
+                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-slate-100 text-slate-600 text-xs font-semibold uppercase">
+                            <tr>
+                                <th class="p-4">รหัสบริการ (ID)</th>
+                                <th class="p-4">ชื่อประเภทบริการ</th>
+                                <th class="p-4">ราคามาตรฐาน (บาท)</th>
+                                <th class="p-4">สถานะการให้บริการ</th>
+                                <th class="p-4 text-center">จัดการ (CRUD)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="service-table-body" class="divide-y divide-slate-100">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- TAB 4: TRANSACTIONS & VOID BILL -->
+            <section id="view-transactions" class="hidden space-y-6">
+                <div class="flex justify-between items-center">
+                    <h3 class="font-bold text-base text-slate-800">ประวัติการชำระเงินและธุรกรรม (Transactions)</h3>
+                </div>
+                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-slate-100 text-slate-600 text-xs font-semibold uppercase">
+                            <tr>
+                                <th class="p-4">รหัสบิล</th>
+                                <th class="p-4">ช่างผู้ให้บริการ</th>
+                                <th class="p-4">บริการ</th>
+                                <th class="p-4">วิธีชำระ</th>
+                                <th class="p-4">ยอดเงิน</th>
+                                <th class="p-4">ค่าคอมช่าง</th>
+                                <th class="p-4">สถานะบิล</th>
+                                <th class="p-4">สถานะเคลียร์เงิน</th>
+                                <th class="p-4 text-center">จัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transaction-table-body" class="divide-y divide-slate-100">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- TAB 5: SETTLEMENTS & PAYOUTS -->
+            <section id="view-settlements" class="hidden space-y-6">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h3 class="font-bold text-base text-slate-800">ระบบตัดรอบเคลียร์เงินค่าคอมมิชชันช่าง (Barber Payouts)</h3>
+                        <p class="text-xs text-slate-500">สรุปยอดงานที่ค้างเคลียร์ (Unsettled) และบันทึกหลักฐานการโอนเงินจ่ายช่าง</p>
+                    </div>
+                </div>
+
+                <!-- Pending Settlement Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="pending-settlement-cards">
+                    <!-- Populated by JS -->
+                </div>
+
+                <!-- Payout History Table -->
+                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm mt-6">
+                    <div class="p-4 bg-slate-50 border-b border-slate-200 font-bold text-sm text-slate-700">
+                        📋 ประวัติการตัดรอบเคลียร์เงินที่ผ่านมา (Payout History)
+                    </div>
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-slate-100 text-slate-600 text-xs font-semibold uppercase">
+                            <tr>
+                                <th class="p-4">รหัสรอบ</th>
+                                <th class="p-4">ชื่อช่าง</th>
+                                <th class="p-4">ช่วงวันที่</th>
+                                <th class="p-4">จำนวนงาน</th>
+                                <th class="p-4">ยอดเงินโอนเคลียร์</th>
+                                <th class="p-4">สถานะ</th>
+                                <th class="p-4 text-center">หลักฐานสลิป</th>
+                            </tr>
+                        </thead>
+                        <tbody id="payout-table-body" class="divide-y divide-slate-100">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <script>
+        // ==========================================================
+        // 🔗 Mock / Live API Configuration
+        // ==========================================================
+        const ADMIN_PAYOUTS_URL = "https://primary-production-f7fa8.up.railway.app/webhook/api/admin/payouts";
+        const ADMIN_SETTLE_URL = "https://primary-production-f7fa8.up.railway.app/webhook/api/admin/settle";
+
+        // Mock State Data (จะซิงค์กับ API เมื่อเปิดใช้งาน)
+        let barbers = [
+            { user_id: 1, full_name: 'ช่างเอก (Master Barber)', role: 'barber', commission_rate: 50.00, is_active: 1 },
+            { user_id: 2, full_name: 'ช่างบอย (Senior Barber)', role: 'barber', commission_rate: 50.00, is_active: 1 }
+        ];
+
+        let services = [
+            { service_id: 1, service_name: 'ตัดผมชายวินเทจ (Vintage Haircut)', base_price: 350.00, is_active: 1 },
+            { service_id: 2, service_name: 'ตัดผม + สระไดร์เซ็ตทรง (Cut & Wash)', base_price: 450.00, is_active: 1 },
+            { service_id: 3, service_name: 'โกนหนวดเคราจัดทรง (Beard Shave)', base_price: 250.00, is_active: 1 }
+        ];
+
+        let transactions = [
+            { transaction_id: 101, barber_name: 'ช่างเอก', service_name: 'ตัดผมชายวินเทจ', payment_method: 'transfer', actual_price: 350.00, commission_amount: 175.00, status: 'completed', payout_status: 'unsettled' },
+            { transaction_id: 102, barber_name: 'ช่างเอก', service_name: 'ตัดผม + สระไดร์', payment_method: 'cash', actual_price: 450.00, commission_amount: 225.00, status: 'completed', payout_status: 'unsettled' },
+            { transaction_id: 103, barber_name: 'ช่างบอย', service_name: 'ตัดผมชายวินเทจ', payment_method: 'transfer', actual_price: 350.00, commission_amount: 175.00, status: 'completed', payout_status: 'settled' }
+        ];
+
+        let payouts = [
+            { payout_id: 'PAY-0011', barber_name: 'ช่างบอย', date_range: '17/08/2026 - 23/08/2026', total_jobs: 22, net_payout: 3850.00, status: 'paid' }
+        ];
+
+        // Tab Navigation
+        function switchTab(tabId) {
+            document.querySelectorAll('main section').forEach(sec => sec.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+
+            document.getElementById(`view-${tabId}`).classList.remove('hidden');
+            document.getElementById(`tab-nav-${tabId}`).classList.add('active');
+
+            const titles = {
+                dashboard: 'ภาพรวมรายได้ (Dashboard)',
+                barbers: 'จัดการช่างตัดผม (Users CRUD)',
+                services: 'จัดการรายการบริการและราคา (Services CRUD)',
+                transactions: 'ประวัติบิลและโมฆะบิล (Transactions & Void Bill)',
+                settlements: 'ตัดรอบเคลียร์เงินช่าง (Settlement / Payouts)'
+            };
+            document.getElementById('page-title').innerText = titles[tabId];
+            renderData();
+        }
+
+        function renderData() {
+            // Render Barbers
+            let barberRows = '';
+            barbers.forEach(b => {
+                barberRows += `
+                    <tr class="hover:bg-slate-50">
+                        <td class="p-4 font-mono font-bold text-slate-600">#${b.user_id}</td>
+                        <td class="p-4 font-semibold text-slate-900">${b.full_name}</td>
+                        <td class="p-4 text-slate-500">${b.role}</td>
+                        <td class="p-4 font-bold text-sky-600">${b.commission_rate}%</td>
+                        <td class="p-4">${b.is_active ? '<span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs font-semibold">เปิดใช้งาน</span>' : '<span class="bg-slate-200 text-slate-600 px-2 py-0.5 rounded-full text-xs">ปิด</span>'}</td>
+                        <td class="p-4 text-center space-x-2">
+                            <button onclick="editBarber(${b.user_id})" class="text-sky-600 hover:underline font-semibold text-xs">แก้ไข %</button>
+                            <button onclick="toggleBarberStatus(${b.user_id})" class="text-amber-600 hover:underline font-semibold text-xs">${b.is_active ? 'ระงับ' : 'เปิด'}</button>
+                        </td>
+                    </tr>
+                `;
+            });
+            document.getElementById('barber-table-body').innerHTML = barberRows;
+
+            // Render Services
+            let serviceRows = '';
+            services.forEach(s => {
+                serviceRows += `
+                    <tr class="hover:bg-slate-50">
+                        <td class="p-4 font-mono font-bold text-slate-600">#${s.service_id}</td>
+                        <td class="p-4 font-semibold text-slate-900">${s.service_name}</td>
+                        <td class="p-4 font-bold text-slate-900">${s.base_price.toFixed(2)} ฿</td>
+                        <td class="p-4">${s.is_active ? '<span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs font-semibold">เปิดให้บริการ</span>' : '<span class="bg-slate-200 text-slate-600 px-2 py-0.5 rounded-full text-xs">ปิดบริการ</span>'}</td>
+                        <td class="p-4 text-center space-x-2">
+                            <button onclick="editServicePrice(${s.service_id})" class="text-sky-600 hover:underline font-semibold text-xs">ปรับราคา</button>
+                            <button onclick="toggleServiceStatus(${s.service_id})" class="text-amber-600 hover:underline font-semibold text-xs">${s.is_active ? 'ปิดบริการ' : 'เปิดบริการ'}</button>
+                        </td>
+                    </tr>
+                `;
+            });
+            document.getElementById('service-table-body').innerHTML = serviceRows;
+
+            // Render Transactions
+            let txRows = '';
+            transactions.forEach(t => {
+                txRows += `
+                    <tr class="hover:bg-slate-50">
+                        <td class="p-4 font-mono font-bold text-slate-600">#TXN-${t.transaction_id}</td>
+                        <td class="p-4 font-semibold text-slate-800">${t.barber_name}</td>
+                        <td class="p-4 text-slate-600">${t.service_name}</td>
+                        <td class="p-4"><span class="text-xs px-2 py-1 rounded font-medium ${t.payment_method === 'transfer' ? 'bg-sky-100 text-sky-700' : 'bg-emerald-100 text-emerald-700'}">${t.payment_method === 'transfer' ? 'โอนเงิน' : 'เงินสด'}</span></td>
+                        <td class="p-4 font-bold text-slate-900">฿${t.actual_price.toFixed(2)}</td>
+                        <td class="p-4 font-bold text-sky-600">฿${t.commission_amount.toFixed(2)}</td>
+                        <td class="p-4">${t.status === 'completed' ? '<span class="text-green-600 font-semibold text-xs">✓ ปกติ</span>' : '<span class="text-red-500 font-semibold text-xs">✕ โมฆะ (Void)</span>'}</td>
+                        <td class="p-4">${t.payout_status === 'settled' ? '<span class="bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded-full font-semibold">เคลียร์แล้ว</span>' : '<span class="bg-amber-100 text-amber-700 text-xs px-2 py-0.5 rounded-full font-semibold">รอเคลียร์</span>'}</td>
+                        <td class="p-4 text-center">
+                            ${t.status === 'completed' ? `<button onclick="voidBill(${t.transaction_id})" class="bg-red-50 hover:bg-red-100 text-red-600 px-3 py-1 rounded-lg text-xs font-bold border border-red-200">โมฆะบิล (Void)</button>` : '<span class="text-slate-400 text-xs">-</span>'}
+                        </td>
+                    </tr>
+                `;
+            });
+            document.getElementById('transaction-table-body').innerHTML = txRows;
+
+            // Render Settlements
+            renderSettlements();
+        }
+
+        async function renderSettlements() {
+            try {
+                const res = await fetch(ADMIN_PAYOUTS_URL);
+                const data = await res.json();
+                let cardHTML = '';
+                
+                if(!data || data.length === 0) {
+                    cardHTML = '<div class="col-span-1 md:col-span-2 text-center py-8 text-slate-500 font-bold">🎉 ไม่มีงานค้างเคลียร์ (ช่างทุกคนได้รับเงินครบถ้วนแล้ว)</div>';
+                } else {
+                    data.forEach(barber => {
+                        cardHTML += `
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between items-center mb-3">
+                                    <span class="font-bold text-base text-slate-900">💈 ${barber.full_name}</span>
+                                    <span class="bg-amber-100 text-amber-800 text-xs px-2.5 py-1 rounded-full font-semibold">มียอดรอเคลียร์</span>
+                                </div>
+                                <div class="text-xs text-slate-500 space-y-1">
+                                    <div>จำนวนงานที่ยังไม่เคลียร์: <strong class="text-slate-800">${barber.total_jobs} หัว</strong></div>
+                                    <div>ยอดเงินรวมค่าบริการ: <strong class="text-slate-800">฿${parseFloat(barber.total_revenue).toFixed(2)}</strong></div>
+                                </div>
+                                <div class="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center">
+                                    <span class="text-xs text-slate-500 font-semibold">ยอดคอมมิชชันสุทธิ:</span>
+                                    <span class="text-xl font-bold text-emerald-600">฿${parseFloat(barber.total_commission).toFixed(2)}</span>
+                                </div>
+                            </div>
+                            <button onclick="executeSettlement(${barber.user_id}, '${barber.full_name}', ${barber.total_jobs}, ${barber.total_revenue}, ${barber.total_commission})" class="mt-5 w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl shadow-md transition text-sm">
+                                ยืนยันโอนเงินเคลียร์ยอดช่าง
+                            </button>
+                        </div>
+                        `;
+                    });
+                }
+                document.getElementById('pending-settlement-cards').innerHTML = cardHTML;
+            } catch (err) {
+                console.error(err);
+                document.getElementById('pending-settlement-cards').innerHTML = '<div class="text-red-500 text-sm font-bold">⚠️ ไม่สามารถเชื่อมต่อกับระบบฐานข้อมูลได้</div>';
+            }
+
+            // Render Payout History (Mock for now)
+            let payoutRows = '';
+            payouts.forEach(p => {
+                payoutRows += `
+                    <tr class="hover:bg-slate-50">
+                        <td class="p-4 font-mono font-bold text-slate-700">${p.payout_id}</td>
+                        <td class="p-4 font-semibold text-slate-900">${p.barber_name}</td>
+                        <td class="p-4 text-slate-500">${p.date_range}</td>
+                        <td class="p-4 font-bold text-slate-700">${p.total_jobs} หัว</td>
+                        <td class="p-4 font-bold text-emerald-600">฿${p.net_payout.toFixed(2)}</td>
+                        <td class="p-4"><span class="bg-green-100 text-green-700 px-2.5 py-0.5 rounded-full text-xs font-semibold">✓ จ่ายแล้ว (Paid)</span></td>
+                        <td class="p-4 text-center"><button onclick="Swal.fire({title:'หลักฐานสลิป', text:'โอนเงินเคลียร์ยอดสำเร็จ', icon:'info'})" class="text-sky-600 hover:underline font-semibold text-xs">🔍 ดูสลิป</button></td>
+                    </tr>
+                `;
+            });
+            document.getElementById('payout-table-body').innerHTML = payoutRows;
+        }
+
+        // Void Bill Action
+        function voidBill(id) {
+            Swal.fire({
+                title: 'ยืนยันทำโมฆะบิล?',
+                text: `คุณต้องการยกเลิกบิล #TXN-${id} และปรับค่าคอมมิชชันเป็น 0 บาทหรือไม่?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: 'ยืนยันยกเลิกบิล',
+                cancelButtonText: 'ยกเลิก'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const tx = transactions.find(t => t.transaction_id === id);
+                    if (tx) {
+                        tx.status = 'voided';
+                        tx.commission_amount = 0.00;
+                        renderData();
+                        Swal.fire('สำเร็จ', 'บิลถูกเปลี่ยนสถานะเป็นโมฆะเรียบร้อยแล้ว', 'success');
+                    }
+                }
+            });
+        }
+
+        // Settlement Action
+        function executeSettlement(userId, barberName, totalJobs, totalRevenue, totalCommission) {
+            Swal.fire({
+                title: `ตัดรอบเคลียร์เงิน ${barberName}`,
+                html: `
+                    <div class="text-left text-sm space-y-3">
+                        <p>ยอดเงินที่ต้องโอนให้ช่าง: <strong class="text-emerald-600 text-base">฿${parseFloat(totalCommission).toFixed(2)}</strong></p>
+                        <p class="text-xs text-slate-500 mt-2">ระบบจะทำการอัปเดตยอดค้างทั้งหมด และส่ง LINE แจ้งเตือนช่างทันทีที่กดยืนยัน</p>
+                    </div>
+                `,
+                showCancelButton: true,
+                confirmButtonColor: '#059669',
+                confirmButtonText: 'ยืนยันโอนเงิน & แจ้งเตือนช่าง',
+                cancelButtonText: 'ยกเลิก'
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({ title: 'กำลังบันทึกข้อมูล...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+                    try {
+                        const payload = {
+                            user_id: userId,
+                            total_jobs: totalJobs,
+                            total_revenue: totalRevenue,
+                            total_commission: totalCommission
+                        };
+                        let response = await fetch(ADMIN_SETTLE_URL, {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(payload)
+                        });
+                        
+                        if (response.ok) {
+                            renderSettlements(); // Refresh data from database
+                            Swal.fire('เคลียร์ยอดสำเร็จ!', `ระบบได้บันทึกการตัดรอบและส่งแจ้งเตือนไปยัง LINE ของ ${barberName} เรียบร้อยครับ`, 'success');
+                        } else {
+                            Swal.fire('เกิดข้อผิดพลาด', 'ไม่สามารถบันทึกข้อมูลได้', 'error');
+                        }
+                    } catch (error) {
+                        Swal.fire('เกิดข้อผิดพลาด', 'ไม่สามารถเชื่อมต่อฐานข้อมูลได้', 'error');
+                    }
+                }
+            });
+        }
+
+        // CRUD Actions
+        function openAddBarberModal() {
+            Swal.fire({
+                title: 'เพิ่มช่างตัดผมใหม่',
+                html: `
+                    <input id="swal-bname" class="swal2-input" placeholder="ชื่อ-นามสกุล หรือชื่อช่าง">
+                    <input id="swal-bcomm" type="number" class="swal2-input" placeholder="อัตราส่วนแบ่งค่าคอมมิชชัน (%)" value="50">
+                `,
+                confirmButtonText: 'บันทึก',
+                showCancelButton: true
+            }).then((res) => {
+                if (res.isConfirmed) {
+                    const name = document.getElementById('swal-bname').value;
+                    const comm = parseFloat(document.getElementById('swal-bcomm').value) || 50;
+                    if(name) {
+                        barbers.push({ user_id: barbers.length + 1, full_name: name, role: 'barber', commission_rate: comm, is_active: 1 });
+                        renderData();
+                        Swal.fire('สำเร็จ', 'เพิ่มข้อมูลช่างเรียบร้อยแล้ว', 'success');
+                    }
+                }
+            });
+        }
+
+        function editBarber(id) {
+            const b = barbers.find(x => x.user_id === id);
+            Swal.fire({
+                title: `แก้ไขส่วนแบ่ง ${b.full_name}`,
+                input: 'number',
+                inputValue: b.commission_rate,
+                inputLabel: 'อัตราส่วนแบ่ง (%)',
+                showCancelButton: true
+            }).then((res) => {
+                if (res.isConfirmed) {
+                    b.commission_rate = parseFloat(res.value);
+                    renderData();
+                    Swal.fire('สำเร็จ', 'อัปเดตอัตราส่วนแบ่งเรียบร้อย', 'success');
+                }
+            });
+        }
+
+        function toggleBarberStatus(id) {
+            const b = barbers.find(x => x.user_id === id);
+            b.is_active = b.is_active ? 0 : 1;
+            renderData();
+        }
+
+        function openAddServiceModal() {
+            Swal.fire({
+                title: 'เพิ่มรายการบริการใหม่',
+                html: `
+                    <input id="swal-sname" class="swal2-input" placeholder="ชื่อประเภทบริการ">
+                    <input id="swal-sprice" type="number" class="swal2-input" placeholder="ราคามาตรฐาน (บาท)">
+                `,
+                confirmButtonText: 'บันทึก',
+                showCancelButton: true
+            }).then((res) => {
+                if (res.isConfirmed) {
+                    const name = document.getElementById('swal-sname').value;
+                    const price = parseFloat(document.getElementById('swal-sprice').value) || 0;
+                    if(name) {
+                        services.push({ service_id: services.length + 1, service_name: name, base_price: price, is_active: 1 });
+                        renderData();
+                        Swal.fire('สำเร็จ', 'เพิ่มรายการบริการเรียบร้อยแล้ว', 'success');
+                    }
+                }
+            });
+        }
+
+        function editServicePrice(id) {
+            const s = services.find(x => x.service_id === id);
+            Swal.fire({
+                title: `ปรับราคา ${s.service_name}`,
+                input: 'number',
+                inputValue: s.base_price,
+                inputLabel: 'ราคาค่าบริการมาตรฐาน (บาท)',
+                showCancelButton: true
+            }).then((res) => {
+                if (res.isConfirmed) {
+                    s.base_price = parseFloat(res.value);
+                    renderData();
+                    Swal.fire('สำเร็จ', 'ปรับราคาค่าบริการเรียบร้อย', 'success');
+                }
+            });
+        }
+
+        function toggleServiceStatus(id) {
+            const s = services.find(x => x.service_id === id);
+            s.is_active = s.is_active ? 0 : 1;
+            renderData();
+        }
+
+        window.onload = () => {
+            renderData();
+        };
+    </script>
+</body>
+</html>
