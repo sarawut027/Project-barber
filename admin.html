@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="th">
 <head>
     <meta charset="UTF-8">
@@ -10,51 +10,51 @@
         @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap');
         body {
             font-family: 'Prompt', sans-serif;
-            background-color: #f1f5f9;
+            background-color: #fafafa;
         }
         .tab-btn.active {
-            background-color: #0284c7;
+            background-color: #d97706; /* amber-600 */
             color: white;
             font-weight: 600;
         }
     </style>
 </head>
-<body class="text-slate-800 flex h-screen overflow-hidden">
+<body class="text-zinc-800 flex h-screen overflow-hidden">
 
     <!-- Sidebar Navigation -->
-    <aside class="w-64 bg-slate-900 text-white flex flex-col justify-between p-5 select-none shrink-0">
+    <aside class="w-64 bg-zinc-900 text-white flex flex-col justify-between p-5 select-none shrink-0">
         <div>
             <!-- Brand Logo -->
-            <div class="flex items-center gap-3 pb-6 border-b border-slate-800">
-                <div class="bg-sky-500/20 text-sky-400 p-2.5 rounded-xl text-xl">💈</div>
+            <div class="flex items-center gap-3 pb-6 border-b border-zinc-800">
+                <div class="bg-amber-500/20 text-amber-500 p-2.5 rounded-xl text-xl border border-amber-500/30">💈</div>
                 <div>
                     <h1 class="font-bold text-base leading-tight text-white">Barber Admin</h1>
-                    <p class="text-xs text-slate-400">ระบบบริหารจัดการร้านตัดผม</p>
+                    <p class="text-xs text-amber-500/70">ระบบบริหารจัดการร้านตัดผม</p>
                 </div>
             </div>
 
             <!-- Navigation Tabs -->
             <nav class="mt-6 space-y-1.5 text-sm">
-                <button onclick="switchTab('dashboard')" id="tab-nav-dashboard" class="tab-btn active w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-slate-300 hover:bg-slate-800 transition">
+                <button onclick="switchTab('dashboard')" id="tab-nav-dashboard" class="tab-btn active w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-zinc-300 hover:bg-zinc-800 transition">
                     <span>📊</span><span>ภาพรวมรายได้ (Dashboard)</span>
                 </button>
-                <button onclick="switchTab('barbers')" id="tab-nav-barbers" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-slate-300 hover:bg-slate-800 transition">
+                <button onclick="switchTab('barbers')" id="tab-nav-barbers" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-zinc-300 hover:bg-zinc-800 transition">
                     <span>✂️</span><span>จัดการช่าง (Barbers CRUD)</span>
                 </button>
-                <button onclick="switchTab('services')" id="tab-nav-services" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-slate-300 hover:bg-slate-800 transition">
+                <button onclick="switchTab('services')" id="tab-nav-services" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-zinc-300 hover:bg-zinc-800 transition">
                     <span>🏷️</span><span>จัดการบริการ (Services CRUD)</span>
                 </button>
-                <button onclick="switchTab('transactions')" id="tab-nav-transactions" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-slate-300 hover:bg-slate-800 transition">
+                <button onclick="switchTab('transactions')" id="tab-nav-transactions" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-zinc-300 hover:bg-zinc-800 transition">
                     <span>🧾</span><span>ประวัติบิล / โมฆะบิล (Void Bill)</span>
                 </button>
-                <button onclick="switchTab('settlements')" id="tab-nav-settlements" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-slate-300 hover:bg-slate-800 transition">
+                <button onclick="switchTab('settlements')" id="tab-nav-settlements" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-zinc-300 hover:bg-zinc-800 transition">
                     <span>🤝</span><span>ตัดรอบเคลียร์เงินช่าง (Payouts)</span>
                 </button>
             </nav>
         </div>
 
         <!-- Footer Info -->
-        <div class="pt-4 border-t border-slate-800 text-xs text-slate-500 text-center">
+        <div class="pt-4 border-t border-zinc-800 text-xs text-zinc-500 text-center">
             Barber Management v2.0 • Railway MySQL
         </div>
     </aside>
@@ -62,11 +62,11 @@
     <!-- Main Content Area -->
     <main class="flex-1 flex flex-col overflow-y-auto">
         <!-- Top Navbar -->
-        <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-8 sticky top-0 z-10">
-            <h2 id="page-title" class="font-bold text-lg text-slate-800">ภาพรวมรายได้ (Dashboard)</h2>
+        <header class="h-16 bg-white border-b border-zinc-200 flex items-center justify-between px-8 sticky top-0 z-10">
+            <h2 id="page-title" class="font-bold text-lg text-zinc-800">ภาพรวมรายได้ (Dashboard)</h2>
             <div class="flex items-center gap-4">
                 <span class="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full font-medium">● ระบบออนไลน์ (Live)</span>
-                <span class="text-sm font-semibold text-slate-700">ผู้ดูแลระบบ (Owner)</span>
+                <span class="text-sm font-semibold text-zinc-700">ผู้ดูแลระบบ (Owner)</span>
             </div>
         </header>
 
@@ -76,27 +76,27 @@
             <!-- TAB 1: DASHBOARD -->
             <section id="view-dashboard" class="space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm border-l-4 border-l-green-500">
-                        <div class="text-xs font-semibold text-slate-500">รายรับรวมทั้งหมด (เงินเข้า)</div>
-                        <div class="text-2xl font-bold text-slate-900 mt-2" id="kpi-total-revenue">฿45,800.00</div>
-                        <div class="text-xs text-slate-400 mt-1">จากบิลที่ชำระสำเร็จทั้งหมด</div>
+                    <div class="bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm border-l-4 border-l-green-500">
+                        <div class="text-xs font-semibold text-zinc-500">รายรับรวมทั้งหมด (เงินเข้า)</div>
+                        <div class="text-2xl font-bold text-zinc-900 mt-2" id="kpi-total-revenue">฿45,800.00</div>
+                        <div class="text-xs text-zinc-400 mt-1">จากบิลที่ชำระสำเร็จทั้งหมด</div>
                     </div>
-                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm border-l-4 border-l-sky-500">
-                        <div class="text-xs font-semibold text-slate-500">ยอดจ่ายค่าคอมมิชชันช่าง (เงินออก)</div>
-                        <div class="text-2xl font-bold text-sky-600 mt-2" id="kpi-total-payouts">฿22,900.00</div>
-                        <div class="text-xs text-slate-400 mt-1">ยอดโอนเคลียร์เงินให้ช่างแล้ว</div>
+                    <div class="bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm border-l-4 border-l-amber-500">
+                        <div class="text-xs font-semibold text-zinc-500">ยอดจ่ายค่าคอมมิชชันช่าง (เงินออก)</div>
+                        <div class="text-2xl font-bold text-amber-600 mt-2" id="kpi-total-payouts">฿22,900.00</div>
+                        <div class="text-xs text-zinc-400 mt-1">ยอดโอนเคลียร์เงินให้ช่างแล้ว</div>
                     </div>
-                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm border-l-4 border-l-amber-500">
-                        <div class="text-xs font-semibold text-slate-500">รายได้สุทธิของร้าน (Net Income)</div>
+                    <div class="bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm border-l-4 border-l-amber-500">
+                        <div class="text-xs font-semibold text-zinc-500">รายได้สุทธิของร้าน (Net Income)</div>
                         <div class="text-2xl font-bold text-amber-600 mt-2" id="kpi-net-income">฿22,900.00</div>
-                        <div class="text-xs text-slate-400 mt-1">รายรับหักส่วนแบ่งช่าง</div>
+                        <div class="text-xs text-zinc-400 mt-1">รายรับหักส่วนแบ่งช่าง</div>
                     </div>
                 </div>
 
-                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                    <h3 class="font-bold text-base text-slate-800 mb-4">🚀 ลิงก์เชื่อมต่อไปยัง Looker Studio Dashboard</h3>
-                    <p class="text-sm text-slate-600 mb-4">สามารถเปิดดูรายงานสถิติขั้นสูง กราฟเปรียบเทียบผลงานช่าง และแนวโน้มรายได้แบบเรียลไทม์ได้ที่นี่</p>
-                    <a href="https://lookerstudio.google.com" target="_blank" class="inline-flex items-center gap-2 bg-sky-600 hover:bg-sky-700 text-white px-5 py-2.5 rounded-xl font-semibold text-sm shadow-md transition">
+                <div class="bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm">
+                    <h3 class="font-bold text-base text-zinc-800 mb-4">🚀 ลิงก์เชื่อมต่อไปยัง Looker Studio Dashboard</h3>
+                    <p class="text-sm text-zinc-600 mb-4">สามารถเปิดดูรายงานสถิติขั้นสูง กราฟเปรียบเทียบผลงานช่าง และแนวโน้มรายได้แบบเรียลไทม์ได้ที่นี่</p>
+                    <a href="https://lookerstudio.google.com" target="_blank" class="inline-flex items-center gap-2 bg-amber-600 hover:bg-amber-700 text-white px-5 py-2.5 rounded-xl font-semibold text-sm shadow-md transition">
                         <span>📊 เปิด Looker Studio แดชบอร์ดฉบับเต็ม</span>
                     </a>
                 </div>
@@ -105,14 +105,14 @@
             <!-- TAB 2: BARBERS CRUD -->
             <section id="view-barbers" class="hidden space-y-6">
                 <div class="flex justify-between items-center">
-                    <h3 class="font-bold text-base text-slate-800">รายชื่อช่างตัดผมในระบบ (Users Management)</h3>
-                    <button onclick="openAddBarberModal()" class="bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold px-4 py-2.5 rounded-xl shadow-sm transition">
+                    <h3 class="font-bold text-base text-zinc-800">รายชื่อช่างตัดผมในระบบ (Users Management)</h3>
+                    <button onclick="openAddBarberModal()" class="bg-zinc-900 hover:bg-zinc-800 text-white text-sm font-semibold px-4 py-2.5 rounded-xl shadow-sm transition">
                         + เพิ่มช่างใหม่
                     </button>
                 </div>
-                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                <div class="bg-white rounded-2xl border border-zinc-200 overflow-hidden shadow-sm">
                     <table class="w-full text-left text-sm">
-                        <thead class="bg-slate-100 text-slate-600 text-xs font-semibold uppercase">
+                        <thead class="bg-zinc-100 text-zinc-600 text-xs font-semibold uppercase">
                             <tr>
                                 <th class="p-4">รหัสช่าง (ID)</th>
                                 <th class="p-4">ชื่อ-นามสกุล</th>
@@ -122,7 +122,7 @@
                                 <th class="p-4 text-center">จัดการ (CRUD)</th>
                             </tr>
                         </thead>
-                        <tbody id="barber-table-body" class="divide-y divide-slate-100">
+                        <tbody id="barber-table-body" class="divide-y divide-zinc-100">
                             <!-- Populated by JS -->
                         </tbody>
                     </table>
@@ -132,14 +132,14 @@
             <!-- TAB 3: SERVICES CRUD -->
             <section id="view-services" class="hidden space-y-6">
                 <div class="flex justify-between items-center">
-                    <h3 class="font-bold text-base text-slate-800">รายการบริการและราคา (Services Management)</h3>
-                    <button onclick="openAddServiceModal()" class="bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold px-4 py-2.5 rounded-xl shadow-sm transition">
+                    <h3 class="font-bold text-base text-zinc-800">รายการบริการและราคา (Services Management)</h3>
+                    <button onclick="openAddServiceModal()" class="bg-zinc-900 hover:bg-zinc-800 text-white text-sm font-semibold px-4 py-2.5 rounded-xl shadow-sm transition">
                         + เพิ่มบริการใหม่
                     </button>
                 </div>
-                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                <div class="bg-white rounded-2xl border border-zinc-200 overflow-hidden shadow-sm">
                     <table class="w-full text-left text-sm">
-                        <thead class="bg-slate-100 text-slate-600 text-xs font-semibold uppercase">
+                        <thead class="bg-zinc-100 text-zinc-600 text-xs font-semibold uppercase">
                             <tr>
                                 <th class="p-4">รหัสบริการ (ID)</th>
                                 <th class="p-4">ชื่อประเภทบริการ</th>
@@ -148,7 +148,7 @@
                                 <th class="p-4 text-center">จัดการ (CRUD)</th>
                             </tr>
                         </thead>
-                        <tbody id="service-table-body" class="divide-y divide-slate-100">
+                        <tbody id="service-table-body" class="divide-y divide-zinc-100">
                             <!-- Populated by JS -->
                         </tbody>
                     </table>
@@ -158,11 +158,11 @@
             <!-- TAB 4: TRANSACTIONS & VOID BILL -->
             <section id="view-transactions" class="hidden space-y-6">
                 <div class="flex justify-between items-center">
-                    <h3 class="font-bold text-base text-slate-800">ประวัติการชำระเงินและธุรกรรม (Transactions)</h3>
+                    <h3 class="font-bold text-base text-zinc-800">ประวัติการชำระเงินและธุรกรรม (Transactions)</h3>
                 </div>
-                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                <div class="bg-white rounded-2xl border border-zinc-200 overflow-hidden shadow-sm">
                     <table class="w-full text-left text-sm">
-                        <thead class="bg-slate-100 text-slate-600 text-xs font-semibold uppercase">
+                        <thead class="bg-zinc-100 text-zinc-600 text-xs font-semibold uppercase">
                             <tr>
                                 <th class="p-4">รหัสบิล</th>
                                 <th class="p-4">ช่างผู้ให้บริการ</th>
@@ -175,7 +175,7 @@
                                 <th class="p-4 text-center">จัดการ</th>
                             </tr>
                         </thead>
-                        <tbody id="transaction-table-body" class="divide-y divide-slate-100">
+                        <tbody id="transaction-table-body" class="divide-y divide-zinc-100">
                             <!-- Populated by JS -->
                         </tbody>
                     </table>
@@ -186,8 +186,8 @@
             <section id="view-settlements" class="hidden space-y-6">
                 <div class="flex justify-between items-center">
                     <div>
-                        <h3 class="font-bold text-base text-slate-800">ระบบตัดรอบเคลียร์เงินค่าคอมมิชชันช่าง (Barber Payouts)</h3>
-                        <p class="text-xs text-slate-500">สรุปยอดงานที่ค้างเคลียร์ (Unsettled) และบันทึกหลักฐานการโอนเงินจ่ายช่าง</p>
+                        <h3 class="font-bold text-base text-zinc-800">ระบบตัดรอบเคลียร์เงินค่าคอมมิชชันช่าง (Barber Payouts)</h3>
+                        <p class="text-xs text-zinc-500">สรุปยอดงานที่ค้างเคลียร์ (Unsettled) และบันทึกหลักฐานการโอนเงินจ่ายช่าง</p>
                     </div>
                 </div>
 
@@ -197,12 +197,12 @@
                 </div>
 
                 <!-- Payout History Table -->
-                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm mt-6">
-                    <div class="p-4 bg-slate-50 border-b border-slate-200 font-bold text-sm text-slate-700">
+                <div class="bg-white rounded-2xl border border-zinc-200 overflow-hidden shadow-sm mt-6">
+                    <div class="p-4 bg-zinc-50 border-b border-zinc-200 font-bold text-sm text-zinc-700">
                         📋 ประวัติการตัดรอบเคลียร์เงินที่ผ่านมา (Payout History)
                     </div>
                     <table class="w-full text-left text-sm">
-                        <thead class="bg-slate-100 text-slate-600 text-xs font-semibold uppercase">
+                        <thead class="bg-zinc-100 text-zinc-600 text-xs font-semibold uppercase">
                             <tr>
                                 <th class="p-4">รหัสรอบ</th>
                                 <th class="p-4">ชื่อช่าง</th>
@@ -213,7 +213,7 @@
                                 <th class="p-4 text-center">หลักฐานสลิป</th>
                             </tr>
                         </thead>
-                        <tbody id="payout-table-body" class="divide-y divide-slate-100">
+                        <tbody id="payout-table-body" class="divide-y divide-zinc-100">
                             <!-- Populated by JS -->
                         </tbody>
                     </table>
@@ -276,14 +276,14 @@
             let barberRows = '';
             barbers.forEach(b => {
                 barberRows += `
-                    <tr class="hover:bg-slate-50">
-                        <td class="p-4 font-mono font-bold text-slate-600">#${b.user_id}</td>
-                        <td class="p-4 font-semibold text-slate-900">${b.full_name}</td>
-                        <td class="p-4 text-slate-500">${b.role}</td>
-                        <td class="p-4 font-bold text-sky-600">${b.commission_rate}%</td>
-                        <td class="p-4">${b.is_active ? '<span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs font-semibold">เปิดใช้งาน</span>' : '<span class="bg-slate-200 text-slate-600 px-2 py-0.5 rounded-full text-xs">ปิด</span>'}</td>
+                    <tr class="hover:bg-zinc-50">
+                        <td class="p-4 font-mono font-bold text-zinc-600">#${b.user_id}</td>
+                        <td class="p-4 font-semibold text-zinc-900">${b.full_name}</td>
+                        <td class="p-4 text-zinc-500">${b.role}</td>
+                        <td class="p-4 font-bold text-amber-600">${b.commission_rate}%</td>
+                        <td class="p-4">${b.is_active ? '<span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs font-semibold">เปิดใช้งาน</span>' : '<span class="bg-zinc-200 text-zinc-600 px-2 py-0.5 rounded-full text-xs">ปิด</span>'}</td>
                         <td class="p-4 text-center space-x-2">
-                            <button onclick="editBarber(${b.user_id})" class="text-sky-600 hover:underline font-semibold text-xs">แก้ไข %</button>
+                            <button onclick="editBarber(${b.user_id})" class="text-amber-600 hover:underline font-semibold text-xs">แก้ไข %</button>
                             <button onclick="toggleBarberStatus(${b.user_id})" class="text-amber-600 hover:underline font-semibold text-xs">${b.is_active ? 'ระงับ' : 'เปิด'}</button>
                         </td>
                     </tr>
@@ -295,13 +295,13 @@
             let serviceRows = '';
             services.forEach(s => {
                 serviceRows += `
-                    <tr class="hover:bg-slate-50">
-                        <td class="p-4 font-mono font-bold text-slate-600">#${s.service_id}</td>
-                        <td class="p-4 font-semibold text-slate-900">${s.service_name}</td>
-                        <td class="p-4 font-bold text-slate-900">${Math.round(s.base_price).toLocaleString()} ฿</td>
-                        <td class="p-4">${s.is_active ? '<span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs font-semibold">เปิดให้บริการ</span>' : '<span class="bg-slate-200 text-slate-600 px-2 py-0.5 rounded-full text-xs">ปิดบริการ</span>'}</td>
+                    <tr class="hover:bg-zinc-50">
+                        <td class="p-4 font-mono font-bold text-zinc-600">#${s.service_id}</td>
+                        <td class="p-4 font-semibold text-zinc-900">${s.service_name}</td>
+                        <td class="p-4 font-bold text-zinc-900">${Math.round(s.base_price).toLocaleString()} ฿</td>
+                        <td class="p-4">${s.is_active ? '<span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs font-semibold">เปิดให้บริการ</span>' : '<span class="bg-zinc-200 text-zinc-600 px-2 py-0.5 rounded-full text-xs">ปิดบริการ</span>'}</td>
                         <td class="p-4 text-center space-x-2">
-                            <button onclick="editServicePrice(${s.service_id})" class="text-sky-600 hover:underline font-semibold text-xs">ปรับราคา</button>
+                            <button onclick="editServicePrice(${s.service_id})" class="text-amber-600 hover:underline font-semibold text-xs">ปรับราคา</button>
                             <button onclick="toggleServiceStatus(${s.service_id})" class="text-amber-600 hover:underline font-semibold text-xs">${s.is_active ? 'ปิดบริการ' : 'เปิดบริการ'}</button>
                         </td>
                     </tr>
@@ -323,21 +323,21 @@
                 
                 let txRows = '';
                 if(txData.length === 0) {
-                    txRows = '<tr><td colspan="9" class="p-6 text-center text-slate-500">ไม่มีประวัติบิล</td></tr>';
+                    txRows = '<tr><td colspan="9" class="p-6 text-center text-zinc-500">ไม่มีประวัติบิล</td></tr>';
                 } else {
                     txData.forEach(t => {
                         txRows += `
-                            <tr class="hover:bg-slate-50">
-                                <td class="p-4 font-mono font-bold text-slate-600">#TXN-${t.transaction_id}</td>
-                                <td class="p-4 font-semibold text-slate-800">${t.barber_name}</td>
-                                <td class="p-4 text-slate-600">${t.service_name}</td>
-                                <td class="p-4"><span class="text-xs px-2 py-1 rounded font-medium ${t.payment_method === 'transfer' ? 'bg-sky-100 text-sky-700' : 'bg-emerald-100 text-emerald-700'}">${t.payment_method === 'transfer' ? 'โอนเงิน' : 'เงินสด'}</span></td>
-                                <td class="p-4 font-bold text-slate-900">฿${parseFloat(t.actual_price).toFixed(2)}</td>
-                                <td class="p-4 font-bold text-sky-600">฿${parseFloat(t.commission_amount).toFixed(2)}</td>
+                            <tr class="hover:bg-zinc-50">
+                                <td class="p-4 font-mono font-bold text-zinc-600">#TXN-${t.transaction_id}</td>
+                                <td class="p-4 font-semibold text-zinc-800">${t.barber_name}</td>
+                                <td class="p-4 text-zinc-600">${t.service_name}</td>
+                                <td class="p-4"><span class="text-xs px-2 py-1 rounded font-medium ${t.payment_method === 'transfer' ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700'}">${t.payment_method === 'transfer' ? 'โอนเงิน' : 'เงินสด'}</span></td>
+                                <td class="p-4 font-bold text-zinc-900">฿${parseFloat(t.actual_price).toFixed(2)}</td>
+                                <td class="p-4 font-bold text-amber-600">฿${parseFloat(t.commission_amount).toFixed(2)}</td>
                                 <td class="p-4">${t.status === 'completed' ? '<span class="text-green-600 font-semibold text-xs">✓ ปกติ</span>' : '<span class="text-red-500 font-semibold text-xs">✕ โมฆะ (Void)</span>'}</td>
                                 <td class="p-4">${t.payout_status === 'settled' ? '<span class="bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded-full font-semibold">เคลียร์แล้ว</span>' : '<span class="bg-amber-100 text-amber-700 text-xs px-2 py-0.5 rounded-full font-semibold">รอเคลียร์</span>'}</td>
                                 <td class="p-4 text-center">
-                                    ${t.status === 'completed' ? `<button onclick="voidBill(${t.transaction_id}, '${t.barber_line_uid}')" class="bg-red-50 hover:bg-red-100 text-red-600 px-3 py-1 rounded-lg text-xs font-bold border border-red-200">โมฆะบิล (Void)</button>` : '<span class="text-slate-400 text-xs">-</span>'}
+                                    ${t.status === 'completed' ? `<button onclick="voidBill(${t.transaction_id}, '${t.barber_line_uid}')" class="bg-red-50 hover:bg-red-100 text-red-600 px-3 py-1 rounded-lg text-xs font-bold border border-red-200">โมฆะบิล (Void)</button>` : '<span class="text-zinc-400 text-xs">-</span>'}
                                 </td>
                             </tr>
                         `;
@@ -354,14 +354,14 @@
             let barberRows = '';
             barbers.forEach(b => {
                 barberRows += `
-                    <tr class="hover:bg-slate-50">
-                        <td class="p-4 font-mono font-bold text-slate-600">#${b.user_id}</td>
-                        <td class="p-4 font-semibold text-slate-900">${b.full_name}</td>
-                        <td class="p-4 text-slate-500">${b.role}</td>
-                        <td class="p-4 font-bold text-sky-600">${b.commission_rate}%</td>
-                        <td class="p-4">${b.is_active ? '<span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs font-semibold">เปิดใช้งาน</span>' : '<span class="bg-slate-200 text-slate-600 px-2 py-0.5 rounded-full text-xs">ปิด</span>'}</td>
+                    <tr class="hover:bg-zinc-50">
+                        <td class="p-4 font-mono font-bold text-zinc-600">#${b.user_id}</td>
+                        <td class="p-4 font-semibold text-zinc-900">${b.full_name}</td>
+                        <td class="p-4 text-zinc-500">${b.role}</td>
+                        <td class="p-4 font-bold text-amber-600">${b.commission_rate}%</td>
+                        <td class="p-4">${b.is_active ? '<span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs font-semibold">เปิดใช้งาน</span>' : '<span class="bg-zinc-200 text-zinc-600 px-2 py-0.5 rounded-full text-xs">ปิด</span>'}</td>
                         <td class="p-4 text-center space-x-2">
-                            <button onclick="editBarber(${b.user_id})" class="text-sky-600 hover:underline font-semibold text-xs">แก้ไข %</button>
+                            <button onclick="editBarber(${b.user_id})" class="text-amber-600 hover:underline font-semibold text-xs">แก้ไข %</button>
                             <button onclick="toggleBarberStatus(${b.user_id})" class="text-amber-600 hover:underline font-semibold text-xs">${b.is_active ? 'ระงับ' : 'เปิด'}</button>
                         </td>
                     </tr>
@@ -373,13 +373,13 @@
             let serviceRows = '';
             services.forEach(s => {
                 serviceRows += `
-                    <tr class="hover:bg-slate-50">
-                        <td class="p-4 font-mono font-bold text-slate-600">#${s.service_id}</td>
-                        <td class="p-4 font-semibold text-slate-900">${s.service_name}</td>
-                        <td class="p-4 font-bold text-slate-900">${s.base_price.toFixed(2)} ฿</td>
-                        <td class="p-4">${s.is_active ? '<span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs font-semibold">เปิดให้บริการ</span>' : '<span class="bg-slate-200 text-slate-600 px-2 py-0.5 rounded-full text-xs">ปิดบริการ</span>'}</td>
+                    <tr class="hover:bg-zinc-50">
+                        <td class="p-4 font-mono font-bold text-zinc-600">#${s.service_id}</td>
+                        <td class="p-4 font-semibold text-zinc-900">${s.service_name}</td>
+                        <td class="p-4 font-bold text-zinc-900">${s.base_price.toFixed(2)} ฿</td>
+                        <td class="p-4">${s.is_active ? '<span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs font-semibold">เปิดให้บริการ</span>' : '<span class="bg-zinc-200 text-zinc-600 px-2 py-0.5 rounded-full text-xs">ปิดบริการ</span>'}</td>
                         <td class="p-4 text-center space-x-2">
-                            <button onclick="editServicePrice(${s.service_id})" class="text-sky-600 hover:underline font-semibold text-xs">ปรับราคา</button>
+                            <button onclick="editServicePrice(${s.service_id})" class="text-amber-600 hover:underline font-semibold text-xs">ปรับราคา</button>
                             <button onclick="toggleServiceStatus(${s.service_id})" class="text-amber-600 hover:underline font-semibold text-xs">${s.is_active ? 'ปิดบริการ' : 'เปิดบริการ'}</button>
                         </td>
                     </tr>
@@ -432,7 +432,7 @@
                 html: `
                     <div class="text-left text-sm space-y-3">
                         <p>ยอดเงินที่ต้องโอนให้ช่าง: <strong class="text-emerald-600 text-base">฿${parseFloat(totalCommission).toFixed(2)}</strong></p>
-                        <p class="text-xs text-slate-500 mt-2">ระบบจะทำการอัปเดตยอดค้างทั้งหมด และส่ง LINE แจ้งเตือนช่างทันทีที่กดยืนยัน</p>
+                        <p class="text-xs text-zinc-500 mt-2">ระบบจะทำการอัปเดตยอดค้างทั้งหมด และส่ง LINE แจ้งเตือนช่างทันทีที่กดยืนยัน</p>
                     </div>
                 `,
                 showCancelButton: true,
