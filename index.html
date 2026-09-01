@@ -236,7 +236,10 @@
             try {
                 // ดึงรายชื่อช่าง
                 const barberRes = await fetch(GET_BARBERS_URL);
-                const barbers = await barberRes.json();
+                const barbersData = await barberRes.json();
+                // ถ้ามีข้อมูลเดียว n8n จะส่งมาเป็น Object (ไม่ใช่อาร์เรย์) เราต้องแปลงให้เป็น Array ก่อนใช้ forEach
+                const barbers = Array.isArray(barbersData) ? barbersData : [barbersData];
+                
                 let barberHTML = '';
                 barbers.forEach(b => {
                     barberHTML += `
@@ -250,7 +253,9 @@
 
                 // ดึงรายการบริการ
                 const serviceRes = await fetch(GET_SERVICES_URL);
-                const services = await serviceRes.json();
+                const servicesData = await serviceRes.json();
+                const services = Array.isArray(servicesData) ? servicesData : [servicesData];
+                
                 let serviceHTML = '';
                 services.forEach(s => {
                     serviceHTML += `

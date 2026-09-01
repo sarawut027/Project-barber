@@ -337,10 +337,17 @@
         async function renderSettlements() {
             try {
                 const res = await fetch(ADMIN_PAYOUTS_URL);
-                const data = await res.json();
+                const rawData = await res.json();
+                
+                // ถ้ามีข้อมูลเดียว n8n จะส่งมาเป็น Object (ไม่ใช่อาร์เรย์) เราต้องแปลงให้เป็น Array
+                let data = [];
+                if (rawData && Object.keys(rawData).length > 0) {
+                    data = Array.isArray(rawData) ? rawData : [rawData];
+                }
+                
                 let cardHTML = '';
                 
-                if(!data || data.length === 0) {
+                if(data.length === 0) {
                     cardHTML = '<div class="col-span-1 md:col-span-2 text-center py-8 text-slate-500 font-bold">🎉 ไม่มีงานค้างเคลียร์ (ช่างทุกคนได้รับเงินครบถ้วนแล้ว)</div>';
                 } else {
                     data.forEach(barber => {
