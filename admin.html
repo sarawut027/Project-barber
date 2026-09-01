@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="th">
 <head>
     <meta charset="UTF-8">
@@ -298,7 +298,7 @@
                     <tr class="hover:bg-zinc-50">
                         <td class="p-4 font-mono font-bold text-zinc-600">#${s.service_id}</td>
                         <td class="p-4 font-semibold text-zinc-900">${s.service_name}</td>
-                        <td class="p-4 font-bold text-zinc-900">${Math.round(s.base_price).toLocaleString()} ฿</td>
+                        <td class="p-4 font-bold text-zinc-900">${s.base_price.toFixed(2)} ฿</td>
                         <td class="p-4">${s.is_active ? '<span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs font-semibold">เปิดให้บริการ</span>' : '<span class="bg-zinc-200 text-zinc-600 px-2 py-0.5 rounded-full text-xs">ปิดบริการ</span>'}</td>
                         <td class="p-4 text-center space-x-2">
                             <button onclick="editServicePrice(${s.service_id})" class="text-amber-600 hover:underline font-semibold text-xs">ปรับราคา</button>
@@ -308,6 +308,12 @@
                 `;
             });
             document.getElementById('service-table-body').innerHTML = serviceRows;
+
+            // Call to render dynamic transactions from API if available
+            if (typeof fetchAndRenderTransactions === 'function') {
+                fetchAndRenderTransactions();
+            }
+        }
 
         const ADMIN_TRANSACTIONS_URL = "https://primary-production-f7fa8.up.railway.app/webhook/api/admin/transactions";
         const ADMIN_VOID_URL = "https://primary-production-f7fa8.up.railway.app/webhook/api/admin/void";
@@ -347,48 +353,6 @@
             } catch (err) {
                 document.getElementById('transaction-table-body').innerHTML = '<tr><td colspan="9" class="p-6 text-center text-red-500 font-bold">⚠️ ไม่สามารถโหลดข้อมูลบิลได้</td></tr>';
             }
-        }
-
-        function renderData() {
-            // Render Barbers
-            let barberRows = '';
-            barbers.forEach(b => {
-                barberRows += `
-                    <tr class="hover:bg-zinc-50">
-                        <td class="p-4 font-mono font-bold text-zinc-600">#${b.user_id}</td>
-                        <td class="p-4 font-semibold text-zinc-900">${b.full_name}</td>
-                        <td class="p-4 text-zinc-500">${b.role}</td>
-                        <td class="p-4 font-bold text-amber-600">${b.commission_rate}%</td>
-                        <td class="p-4">${b.is_active ? '<span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs font-semibold">เปิดใช้งาน</span>' : '<span class="bg-zinc-200 text-zinc-600 px-2 py-0.5 rounded-full text-xs">ปิด</span>'}</td>
-                        <td class="p-4 text-center space-x-2">
-                            <button onclick="editBarber(${b.user_id})" class="text-amber-600 hover:underline font-semibold text-xs">แก้ไข %</button>
-                            <button onclick="toggleBarberStatus(${b.user_id})" class="text-amber-600 hover:underline font-semibold text-xs">${b.is_active ? 'ระงับ' : 'เปิด'}</button>
-                        </td>
-                    </tr>
-                `;
-            });
-            document.getElementById('barber-table-body').innerHTML = barberRows;
-
-            // Render Services
-            let serviceRows = '';
-            services.forEach(s => {
-                serviceRows += `
-                    <tr class="hover:bg-zinc-50">
-                        <td class="p-4 font-mono font-bold text-zinc-600">#${s.service_id}</td>
-                        <td class="p-4 font-semibold text-zinc-900">${s.service_name}</td>
-                        <td class="p-4 font-bold text-zinc-900">${s.base_price.toFixed(2)} ฿</td>
-                        <td class="p-4">${s.is_active ? '<span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs font-semibold">เปิดให้บริการ</span>' : '<span class="bg-zinc-200 text-zinc-600 px-2 py-0.5 rounded-full text-xs">ปิดบริการ</span>'}</td>
-                        <td class="p-4 text-center space-x-2">
-                            <button onclick="editServicePrice(${s.service_id})" class="text-amber-600 hover:underline font-semibold text-xs">ปรับราคา</button>
-                            <button onclick="toggleServiceStatus(${s.service_id})" class="text-amber-600 hover:underline font-semibold text-xs">${s.is_active ? 'ปิดบริการ' : 'เปิดบริการ'}</button>
-                        </td>
-                    </tr>
-                `;
-            });
-            document.getElementById('service-table-body').innerHTML = serviceRows;
-
-            fetchAndRenderTransactions();
-            renderSettlements();
         }
 
         // Void Bill Action
