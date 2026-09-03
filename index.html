@@ -388,7 +388,7 @@
 
                 const result = await response.json().catch(() => ({}));
 
-                if (response.ok) {
+                if (response.ok && result.status !== 'error') {
                     Swal.fire({ 
                         icon: 'success', 
                         title: 'ชำระเงินสำเร็จ!', 
@@ -404,8 +404,8 @@
                 } else {
                     Swal.fire({ 
                         icon: 'error', 
-                        title: 'เกิดข้อผิดพลาด', 
-                        text: result.message || 'ไม่สามารถตรวจสอบหรือบันทึกข้อมูลได้ กรุณาลองใหม่อีกครั้ง', 
+                        title: 'การชำระเงินไม่ถูกต้อง', 
+                        text: result.message || 'สลิปไม่ถูกต้อง หรือไม่สามารถตรวจสอบได้ กรุณาลองใหม่อีกครั้ง', 
                         confirmButtonColor: '#0f172a' 
                     });
                 }
