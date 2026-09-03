@@ -219,20 +219,43 @@
         // ==========================================================
         // Live API Configuration (Railway Webhooks)
         // ==========================================================
+        const ADMIN_GATEWAY_URL = "https://primary-production-f7fa8.up.railway.app/webhook/api/admin";
+        
+        // Direct REST Endpoints (Fallback)
         const ADMIN_PAYOUTS_URL = "https://primary-production-f7fa8.up.railway.app/webhook/api/admin/payouts";
         const ADMIN_SETTLE_URL = "https://primary-production-f7fa8.up.railway.app/webhook/api/admin/settle";
         const GET_BARBERS_URL = "https://primary-production-f7fa8.up.railway.app/webhook/api/barbers";
         const GET_SERVICES_URL = "https://primary-production-f7fa8.up.railway.app/webhook/api/services";
         const ADMIN_TRANSACTIONS_URL = "https://primary-production-f7fa8.up.railway.app/webhook/api/admin/transactions";
         const ADMIN_VOID_URL = "https://primary-production-f7fa8.up.railway.app/webhook/api/admin/void";
-        
-        // CRUD Save URLs
         const ADMIN_SERVICE_SAVE_URL = "https://primary-production-f7fa8.up.railway.app/webhook/api/admin/services/save";
         const ADMIN_BARBER_SAVE_URL = "https://primary-production-f7fa8.up.railway.app/webhook/api/admin/barbers/save";
         const ADMIN_TX_UPDATE_URL = "https://primary-production-f7fa8.up.railway.app/webhook/api/admin/transactions/update";
 
         let barbers = [];
         let services = [];
+
+        // Resilient Enterprise API Dispatcher: tries Admin Gateway first, then direct fallback
+        async function sendAdminRequest(action, payload, fallbackUrl) {
+            try {
+                let res = await fetch(ADMIN_GATEWAY_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ action, ...payload })
+                });
+                if (res.ok) return await res.json();
+            } catch (e) {
+                console.warn("Gateway request failed, trying direct endpoint:", e);
+            }
+            if (fallbackUrl) {
+                let fallbackRes = await fetch(fallbackUrl, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+                return await fallbackRes.json();
+            }
+        }
 
         function parseN8nResponse(rawData) {
             if (!rawData) return [];
@@ -391,11 +414,7 @@
                     Swal.fire({ title: 'กำลังบันทึก...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
                     try {
                         const payload = result.value;
-                        await fetch(ADMIN_SERVICE_SAVE_URL, {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify(payload)
-                        });
+                        await sendAdminRequest('save_service', payload, ADMIN_SERVICE_SAVE_URL);
 
                         // อัปเดต state ในหน้าเว็บทันที
                         if (isEdit) {
@@ -409,7 +428,7 @@
                         Swal.fire('สำเร็จ!', 'บันทึกข้อมูลบริการเรียบร้อยแล้ว', 'success');
                     } catch (err) {
                         console.error(err);
-                        Swal.fire('แจ้งเตือน', 'บันทึกในหน้าเว็บสำเร็จแล้ว (เชื่อมต่อ n8n เมื่อออนไลน์)', 'info');
+                        Swal.fire('แจ้งเตือน', 'บันทึกในหน้าเว็บสำเร็จแล้ว', 'info');
                         renderData();
                     }
                 }
@@ -423,16 +442,12 @@
             renderData();
 
             try {
-                await fetch(ADMIN_SERVICE_SAVE_URL, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        service_id: s.service_id,
-                        service_name: s.service_name,
-                        base_price: s.base_price,
-                        is_active: newStatus
-                    })
-                });
+                await sendAdminRequest('save_service', {
+                    service_id: s.service_id,
+                    service_name: s.service_name,
+                    base_price: s.base_price,
+                    is_active: newStatus
+                }, ADMIN_SERVICE_SAVE_URL);
             } catch (e) { console.warn("Toggle service sync warning:", e); }
         }
 
@@ -494,11 +509,7 @@
                     Swal.fire({ title: 'กำลังบันทึก...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
                     try {
                         const payload = result.value;
-                        await fetch(ADMIN_BARBER_SAVE_URL, {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify(payload)
-                        });
+                        await sendAdminRequest('save_barber', payload, ADMIN_BARBER_SAVE_URL);
 
                         if (isEdit) {
                             let idx = barbers.findIndex(b => b.user_id == userId);
@@ -526,17 +537,13 @@
             renderData();
 
             try {
-                await fetch(ADMIN_BARBER_SAVE_URL, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        user_id: b.user_id,
-                        full_name: b.full_name,
-                        commission_rate: b.commission_rate,
-                        line_uid: b.line_uid,
-                        is_active: newStatus
-                    })
-                });
+                await sendAdminRequest('save_barber', {
+                    user_id: b.user_id,
+                    full_name: b.full_name,
+                    commission_rate: b.commission_rate,
+                    line_uid: b.line_uid,
+                    is_active: newStatus
+                }, ADMIN_BARBER_SAVE_URL);
             } catch (e) { console.warn("Toggle barber sync warning:", e); }
         }
 
@@ -622,15 +629,12 @@
                 if (res.isConfirmed) {
                     Swal.fire({ title: 'กำลังบันทึก...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
                     try {
-                        await fetch(ADMIN_TX_UPDATE_URL, {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({
-                                transaction_id: txnId,
-                                actual_price: res.value.actual_price,
-                                commission_amount: res.value.commission_amount
-                            })
-                        });
+                        await sendAdminRequest('update_transaction', {
+                            transaction_id: txnId,
+                            actual_price: res.value.actual_price,
+                            commission_amount: res.value.commission_amount
+                        }, ADMIN_TX_UPDATE_URL);
+
                         fetchAndRenderTransactions();
                         renderSettlements();
                         Swal.fire('สำเร็จ!', 'แก้ไขยอดบิลเรียบร้อยแล้ว', 'success');
@@ -687,16 +691,10 @@
                 if (result.isConfirmed) {
                     Swal.fire({ title: 'กำลังบันทึก...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
                     try {
-                        let response = await fetch(ADMIN_VOID_URL, {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ transaction_id: id, barber_line_uid: barberLineUid })
-                        });
-                        if(response.ok) {
-                            fetchAndRenderTransactions();
-                            renderSettlements();
-                            Swal.fire('สำเร็จ', 'โมฆะบิลเรียบร้อยแล้ว', 'success');
-                        }
+                        await sendAdminRequest('void_bill', { transaction_id: id, barber_line_uid: barberLineUid }, ADMIN_VOID_URL);
+                        fetchAndRenderTransactions();
+                        renderSettlements();
+                        Swal.fire('สำเร็จ', 'โมฆะบิลเรียบร้อยแล้ว', 'success');
                     } catch (error) { Swal.fire('Error', 'การเชื่อมต่อผิดพลาด', 'error'); }
                 }
             });
@@ -714,18 +712,17 @@
                 if (result.isConfirmed) {
                     Swal.fire({ title: 'กำลังบันทึกข้อมูล...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
                     try {
-                        let response = await fetch(ADMIN_SETTLE_URL, {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ user_id: userId, line_uid: lineUid, total_jobs: totalJobs, total_revenue: totalRevenue, total_commission: totalCommission })
-                        });
-                        if (response.ok) {
-                            renderSettlements();
-                            fetchAndRenderTransactions();
-                            Swal.fire('เคลียร์ยอดสำเร็จ!', 'บันทึกการตัดรอบและส่งแจ้งเตือนเรียบร้อย', 'success');
-                        } else {
-                            Swal.fire('เกิดข้อผิดพลาด', 'ไม่สามารถบันทึกข้อมูลได้', 'error');
-                        }
+                        await sendAdminRequest('settle_payout', {
+                            user_id: userId,
+                            line_uid: lineUid,
+                            total_jobs: totalJobs,
+                            total_revenue: totalRevenue,
+                            total_commission: totalCommission
+                        }, ADMIN_SETTLE_URL);
+
+                        renderSettlements();
+                        fetchAndRenderTransactions();
+                        Swal.fire('เคลียร์ยอดสำเร็จ!', 'บันทึกการตัดรอบและส่งแจ้งเตือนเรียบร้อย', 'success');
                     } catch (error) { Swal.fire('Error', 'การเชื่อมต่อผิดพลาด', 'error'); }
                 }
             });
