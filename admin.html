@@ -318,14 +318,47 @@
             document.getElementById('page-title').innerText = titles[tabId];
         }
 
+        function updateImagePreview(boxId, url, fallbackIcon) {
+            const box = document.getElementById(boxId);
+            if (!box) return;
+            if (url && url.trim()) {
+                box.innerHTML = `<img src="${url}" class="w-full h-full object-cover" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\\'text-2xl\\'>${fallbackIcon}</span>';">`;
+            } else {
+                box.innerHTML = `<span class="text-2xl">${fallbackIcon}</span>`;
+            }
+        }
+
+        function handleFileUpload(input, targetInputId, boxId, fallbackIcon) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const base64 = e.target.result;
+                    const txtInput = document.getElementById(targetInputId);
+                    if (txtInput) txtInput.value = base64;
+                    updateImagePreview(boxId, base64, fallbackIcon);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
         function renderData() {
             // 1. Render Barbers Table
             let barberRows = '';
             barbers.forEach(b => {
                 const isActive = b.is_active !== undefined ? (Number(b.is_active) === 1) : true;
+                const barberImg = b.image_url 
+                    ? `<img src="${b.image_url}" class="w-10 h-10 rounded-full object-cover border border-zinc-200 shadow-sm flex-shrink-0" onerror="this.onerror=null; this.src=''; this.parentElement.innerHTML='<div class=\\'w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center text-base\\'>💈</div>';">`
+                    : `<div class="w-10 h-10 rounded-full bg-amber-50 border border-amber-200 flex items-center justify-center text-base flex-shrink-0">💈</div>`;
+
                 barberRows += `<tr class="hover:bg-zinc-50">
                     <td class="p-4 font-mono font-bold text-zinc-600">#${b.user_id}</td>
-                    <td class="p-4 font-semibold text-zinc-900">${b.full_name}</td>
+                    <td class="p-4 font-semibold text-zinc-900 flex items-center gap-3">
+                        ${barberImg}
+                        <div>
+                            <p class="font-bold text-zinc-900">${b.full_name}</p>
+                            <p class="text-xs text-zinc-400 font-normal font-mono">${b.line_uid ? b.line_uid.substring(0, 10) + '...' : 'ไม่มี LINE UID'}</p>
+                        </div>
+                    </td>
                     <td class="p-4 text-zinc-500">${b.role || 'ช่างตัดผม'}</td>
                     <td class="p-4 font-bold text-amber-600">${b.commission_rate || 50}%</td>
                     <td class="p-4 font-mono text-xs text-zinc-400 truncate max-w-[120px]">${b.line_uid || '-'}</td>
@@ -345,9 +378,19 @@
             let serviceRows = '';
             services.forEach(s => {
                 const isActive = s.is_active !== undefined ? (Number(s.is_active) === 1) : true;
+                const serviceImg = s.image_url 
+                    ? `<img src="${s.image_url}" class="w-10 h-10 rounded-xl object-cover border border-zinc-200 shadow-sm flex-shrink-0" onerror="this.onerror=null; this.src=''; this.parentElement.innerHTML='<div class=\\'w-10 h-10 rounded-xl bg-zinc-100 flex items-center justify-center text-base\\'>✂️</div>';">`
+                    : `<div class="w-10 h-10 rounded-xl bg-zinc-100 border border-zinc-200 flex items-center justify-center text-base flex-shrink-0">✂️</div>`;
+
                 serviceRows += `<tr class="hover:bg-zinc-50">
                     <td class="p-4 font-mono font-bold text-zinc-600">#${s.service_id}</td>
-                    <td class="p-4 font-semibold text-zinc-900">${s.service_name}</td>
+                    <td class="p-4 font-semibold text-zinc-900 flex items-center gap-3">
+                        ${serviceImg}
+                        <div>
+                            <p class="font-bold text-zinc-900">${s.service_name}</p>
+                            <p class="text-xs text-zinc-400 font-normal">รหัส #${s.service_id}</p>
+                        </div>
+                    </td>
                     <td class="p-4 font-bold text-zinc-900">${parseFloat(s.base_price).toFixed(2)} ฿</td>
                     <td class="p-4">${isActive ? '<span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs font-semibold">เปิดให้บริการ</span>' : '<span class="bg-zinc-200 text-zinc-600 px-2 py-0.5 rounded-full text-xs">ปิดบริการ</span>'}</td>
                     <td class="p-4 text-center space-x-1 whitespace-nowrap">
@@ -382,6 +425,18 @@
                             <input id="swal-service-price" type="number" step="0.01" class="w-full px-3 py-2 border rounded-xl text-sm" value="${service ? service.base_price : ''}" placeholder="เช่น 350">
                         </div>
                         <div>
+                            <label class="block text-xs font-bold text-zinc-600 mb-1">รูปภาพบริการ (Image URL หรือ อัปโหลดจากเครื่อง)</label>
+                            <div class="flex items-center gap-3 p-2 bg-zinc-50 border rounded-xl">
+                                <div id="service-img-preview-box" class="w-14 h-14 rounded-xl border border-zinc-200 bg-white flex items-center justify-center overflow-hidden flex-shrink-0 shadow-sm">
+                                    ${service && service.image_url ? `<img src="${service.image_url}" class="w-full h-full object-cover">` : `<span class="text-2xl">✂️</span>`}
+                                </div>
+                                <div class="flex-1 space-y-1.5 min-w-0">
+                                    <input id="swal-service-img" class="w-full px-2.5 py-1.5 border rounded-lg text-xs" value="${service ? (service.image_url || '') : ''}" placeholder="ใส่ลิงก์รูปภาพ เช่น https://... หรือ images/..." oninput="updateImagePreview('service-img-preview-box', this.value, '✂️')">
+                                    <input type="file" id="swal-service-file" accept="image/*" class="text-xs text-zinc-500 file:mr-2 file:py-1 file:px-2.5 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-amber-100 file:text-amber-800 hover:file:bg-amber-200" onchange="handleFileUpload(this, 'swal-service-img', 'service-img-preview-box', '✂️')">
+                                </div>
+                            </div>
+                        </div>
+                        <div>
                             <label class="block text-xs font-bold text-zinc-600 mb-1">สถานะ</label>
                             <select id="swal-service-active" class="w-full px-3 py-2 border rounded-xl text-sm">
                                 <option value="1" ${service && Number(service.is_active) === 1 ? 'selected' : ''}>เปิดให้บริการ</option>
@@ -397,6 +452,7 @@
                 preConfirm: () => {
                     const name = document.getElementById('swal-service-name').value.trim();
                     const price = parseFloat(document.getElementById('swal-service-price').value);
+                    const imgUrl = document.getElementById('swal-service-img').value.trim();
                     const isActive = parseInt(document.getElementById('swal-service-active').value);
 
                     if (!name) { Swal.showValidationMessage('กรุณาระบุชื่อบริการ'); return false; }
@@ -406,6 +462,7 @@
                         service_id: serviceId,
                         service_name: name,
                         base_price: price,
+                        image_url: imgUrl,
                         is_active: isActive
                     };
                 }
@@ -475,6 +532,18 @@
                             <input id="swal-barber-uid" class="w-full px-3 py-2 border rounded-xl text-sm font-mono text-xs" value="${barber ? (barber.line_uid || '') : ''}" placeholder="เช่น U61beeb312c2177ec3677f04d06796162">
                         </div>
                         <div>
+                            <label class="block text-xs font-bold text-zinc-600 mb-1">รูปโปรไฟล์ช่าง (Image URL หรือ อัปโหลดจากเครื่อง)</label>
+                            <div class="flex items-center gap-3 p-2 bg-zinc-50 border rounded-xl">
+                                <div id="barber-img-preview-box" class="w-14 h-14 rounded-full border border-zinc-200 bg-white flex items-center justify-center overflow-hidden flex-shrink-0 shadow-sm">
+                                    ${barber && barber.image_url ? `<img src="${barber.image_url}" class="w-full h-full object-cover">` : `<span class="text-2xl">💈</span>`}
+                                </div>
+                                <div class="flex-1 space-y-1.5 min-w-0">
+                                    <input id="swal-barber-img" class="w-full px-2.5 py-1.5 border rounded-lg text-xs" value="${barber ? (barber.image_url || '') : ''}" placeholder="ใส่ลิงก์รูปภาพ เช่น https://... หรือ images/..." oninput="updateImagePreview('barber-img-preview-box', this.value, '💈')">
+                                    <input type="file" id="swal-barber-file" accept="image/*" class="text-xs text-zinc-500 file:mr-2 file:py-1 file:px-2.5 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-amber-100 file:text-amber-800 hover:file:bg-amber-200" onchange="handleFileUpload(this, 'swal-barber-img', 'barber-img-preview-box', '💈')">
+                                </div>
+                            </div>
+                        </div>
+                        <div>
                             <label class="block text-xs font-bold text-zinc-600 mb-1">สถานะช่าง</label>
                             <select id="swal-barber-active" class="w-full px-3 py-2 border rounded-xl text-sm">
                                 <option value="1" ${barber && Number(barber.is_active) === 1 ? 'selected' : ''}>เปิดใช้งาน (พร้อมรับงาน)</option>
@@ -491,6 +560,7 @@
                     const name = document.getElementById('swal-barber-name').value.trim();
                     const comm = parseFloat(document.getElementById('swal-barber-comm').value);
                     const uid = document.getElementById('swal-barber-uid').value.trim();
+                    const imgUrl = document.getElementById('swal-barber-img').value.trim();
                     const isActive = parseInt(document.getElementById('swal-barber-active').value);
 
                     if (!name) { Swal.showValidationMessage('กรุณาระบุชื่อช่าง'); return false; }
@@ -501,6 +571,7 @@
                         full_name: name,
                         commission_rate: comm,
                         line_uid: uid,
+                        image_url: imgUrl,
                         is_active: isActive
                     };
                 }
