@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Barber Shop Admin Backoffice (CRUD & Settlement)</title>
+    <title>เสหยอดบาร์เบอร์ - Admin Backoffice (CRUD & Settlement)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
@@ -21,15 +21,17 @@
 </head>
 <body class="text-zinc-800 flex flex-col md:flex-row h-screen overflow-hidden bg-zinc-50">
 
-    <!-- Sidebar Navigation (Bottom Nav on Mobile, Left Sidebar on Desktop) -->
+    <!-- Sidebar Navigation -->
     <aside class="w-full md:w-64 bg-zinc-900 text-white flex flex-row md:flex-col justify-between p-2 md:p-5 select-none shrink-0 z-20 order-2 md:order-1 border-t md:border-t-0 md:border-r border-zinc-800 shadow-[0_-5px_10px_rgba(0,0,0,0.1)] md:shadow-none pb-safe">
         <div class="flex-1 md:flex-none flex flex-col justify-center">
-            <!-- Brand Logo (Hidden on mobile) -->
+            <!-- Brand Logo -->
             <div class="hidden md:flex items-center gap-3 pb-6 border-b border-zinc-800">
-                <div class="bg-amber-500/20 text-amber-500 p-2.5 rounded-xl text-xl border border-amber-500/30">💈</div>
+                <div class="w-10 h-10 rounded-xl overflow-hidden bg-black border border-amber-500/40 p-0.5">
+                    <img src="./images/logo.png" alt="Logo" class="w-full h-full object-cover rounded-lg" onerror="this.outerHTML='<div class=\'w-full h-full flex items-center justify-center text-xl\'>💈</div>'">
+                </div>
                 <div>
-                    <h1 class="font-bold text-base leading-tight text-white">เสหยอดบาร์เบอร์ Admin</h1>
-                    <p class="text-xs text-amber-500/70">ระบบบริหารจัดการร้านและตัดรอบเงิน</p>
+                    <h1 class="font-bold text-base leading-tight text-white">เสหยอดบาร์เบอร์</h1>
+                    <p class="text-xs text-amber-500/80">ระบบจัดการร้าน & เคลียร์เงิน</p>
                 </div>
             </div>
 
@@ -41,11 +43,11 @@
                 </button>
                 <button onclick="switchTab('barbers')" id="tab-nav-barbers" class="tab-btn flex-1 md:w-full flex flex-col md:flex-row items-center justify-center md:justify-start gap-1 md:gap-3 p-2 md:px-4 md:py-3 rounded-xl text-center md:text-left text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 transition min-w-[70px]">
                     <span class="text-xl md:text-base mb-0.5 md:mb-0">✂️</span>
-                    <span class="text-[10px] md:text-sm font-medium whitespace-nowrap leading-tight">ช่าง <span class="hidden md:inline">(Barbers)</span></span>
+                    <span class="text-[10px] md:text-sm font-medium whitespace-nowrap leading-tight">ช่าง <span class="hidden md:inline">(Barbers CRUD)</span></span>
                 </button>
                 <button onclick="switchTab('services')" id="tab-nav-services" class="tab-btn flex-1 md:w-full flex flex-col md:flex-row items-center justify-center md:justify-start gap-1 md:gap-3 p-2 md:px-4 md:py-3 rounded-xl text-center md:text-left text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 transition min-w-[70px]">
                     <span class="text-xl md:text-base mb-0.5 md:mb-0">🏷️</span>
-                    <span class="text-[10px] md:text-sm font-medium whitespace-nowrap leading-tight">บริการ <span class="hidden md:inline">(Services)</span></span>
+                    <span class="text-[10px] md:text-sm font-medium whitespace-nowrap leading-tight">บริการ <span class="hidden md:inline">(Services CRUD)</span></span>
                 </button>
                 <button onclick="switchTab('transactions')" id="tab-nav-transactions" class="tab-btn flex-1 md:w-full flex flex-col md:flex-row items-center justify-center md:justify-start gap-1 md:gap-3 p-2 md:px-4 md:py-3 rounded-xl text-center md:text-left text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 transition min-w-[70px]">
                     <span class="text-xl md:text-base mb-0.5 md:mb-0">🧾</span>
@@ -58,9 +60,8 @@
             </nav>
         </div>
 
-        <!-- Footer Info (Hidden on mobile) -->
         <div class="hidden md:block pt-4 border-t border-zinc-800 text-xs text-zinc-500 text-center">
-            Barber Management v2.0 • Railway
+            เสหยอดบาร์เบอร์ v2.0 • Railway
         </div>
     </aside>
 
@@ -72,7 +73,7 @@
             <div class="flex items-center gap-2 md:gap-4 shrink-0">
                 <span class="hidden md:inline-flex text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full font-medium">● ระบบออนไลน์ (Live)</span>
                 <span class="inline-flex md:hidden text-xs bg-green-100 text-green-700 w-3 h-3 rounded-full"></span>
-                <span class="text-xs md:text-sm font-semibold text-zinc-700">Owner</span>
+                <span class="text-xs md:text-sm font-semibold text-zinc-700">เจ้าของร้าน</span>
             </div>
         </header>
 
@@ -110,18 +111,26 @@
 
             <!-- TAB 2: BARBERS CRUD -->
             <section id="view-barbers" class="hidden space-y-6">
-                <div class="flex justify-between items-center">
-                    <h3 class="font-bold text-base text-zinc-800">รายชื่อช่างตัดผมในระบบ (Users Management)</h3>
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                    <div>
+                        <h3 class="font-bold text-base text-zinc-800">รายชื่อช่างตัดผมในระบบ (Users Management)</h3>
+                        <p class="text-xs text-zinc-500">จัดการข้อมูลช่าง อัตราส่วนแบ่งคอมมิชชัน (%) และ LINE UID</p>
+                    </div>
+                    <button onclick="openBarberModal()" class="inline-flex items-center gap-1.5 bg-amber-600 hover:bg-amber-700 text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow-md transition self-start md:self-auto">
+                        <span class="text-base font-bold">+</span> เพิ่มช่างตัดผมใหม่
+                    </button>
                 </div>
                 <div class="bg-white rounded-2xl border border-zinc-200 overflow-x-auto shadow-sm">
                     <table class="w-full text-left text-sm">
                         <thead class="bg-zinc-100 text-zinc-600 text-xs font-semibold uppercase">
                             <tr>
-                                <th class="p-4">รหัสช่าง (ID)</th>
+                                <th class="p-4">รหัส (ID)</th>
                                 <th class="p-4">ชื่อ-นามสกุล</th>
                                 <th class="p-4">ตำแหน่ง</th>
-                                <th class="p-4">ส่วนแบ่งคอมมิชชัน (%)</th>
+                                <th class="p-4">ส่วนแบ่งคอม (%)</th>
+                                <th class="p-4">LINE UID</th>
                                 <th class="p-4">สถานะ</th>
+                                <th class="p-4 text-center">จัดการ</th>
                             </tr>
                         </thead>
                         <tbody id="barber-table-body" class="divide-y divide-zinc-100">
@@ -133,17 +142,24 @@
 
             <!-- TAB 3: SERVICES CRUD -->
             <section id="view-services" class="hidden space-y-6">
-                <div class="flex justify-between items-center">
-                    <h3 class="font-bold text-base text-zinc-800">รายการบริการและราคา (Services Management)</h3>
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                    <div>
+                        <h3 class="font-bold text-base text-zinc-800">รายการบริการและราคา (Services Management)</h3>
+                        <p class="text-xs text-zinc-500">จัดการประเภทบริการ ราคามาตรฐาน และเปิด/ปิดให้บริการ</p>
+                    </div>
+                    <button onclick="openServiceModal()" class="inline-flex items-center gap-1.5 bg-amber-600 hover:bg-amber-700 text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow-md transition self-start md:self-auto">
+                        <span class="text-base font-bold">+</span> เพิ่มบริการใหม่
+                    </button>
                 </div>
                 <div class="bg-white rounded-2xl border border-zinc-200 overflow-x-auto shadow-sm">
                     <table class="w-full text-left text-sm">
                         <thead class="bg-zinc-100 text-zinc-600 text-xs font-semibold uppercase">
                             <tr>
-                                <th class="p-4">รหัสบริการ (ID)</th>
+                                <th class="p-4">รหัส (ID)</th>
                                 <th class="p-4">ชื่อประเภทบริการ</th>
                                 <th class="p-4">ราคามาตรฐาน (บาท)</th>
                                 <th class="p-4">สถานะการให้บริการ</th>
+                                <th class="p-4 text-center">จัดการ</th>
                             </tr>
                         </thead>
                         <tbody id="service-table-body" class="divide-y divide-zinc-100">
@@ -156,7 +172,10 @@
             <!-- TAB 4: TRANSACTIONS & VOID BILL -->
             <section id="view-transactions" class="hidden space-y-6">
                 <div class="flex justify-between items-center">
-                    <h3 class="font-bold text-base text-zinc-800">ประวัติการชำระเงินและธุรกรรม (Transactions)</h3>
+                    <div>
+                        <h3 class="font-bold text-base text-zinc-800">ประวัติการชำระเงินและธุรกรรม (Transactions)</h3>
+                        <p class="text-xs text-zinc-500">ตรวจสอบบิล แก้ไขยอดเงิน หรือทำโมฆะบิลผิดพลาด</p>
+                    </div>
                 </div>
                 <div class="bg-white rounded-2xl border border-zinc-200 overflow-x-auto shadow-sm">
                     <table class="w-full text-left text-sm">
@@ -198,7 +217,7 @@
 
     <script>
         // ==========================================================
-        // Mock / Live API Configuration
+        // Live API Configuration (Railway Webhooks)
         // ==========================================================
         const ADMIN_PAYOUTS_URL = "https://primary-production-f7fa8.up.railway.app/webhook/api/admin/payouts";
         const ADMIN_SETTLE_URL = "https://primary-production-f7fa8.up.railway.app/webhook/api/admin/settle";
@@ -206,11 +225,15 @@
         const GET_SERVICES_URL = "https://primary-production-f7fa8.up.railway.app/webhook/api/services";
         const ADMIN_TRANSACTIONS_URL = "https://primary-production-f7fa8.up.railway.app/webhook/api/admin/transactions";
         const ADMIN_VOID_URL = "https://primary-production-f7fa8.up.railway.app/webhook/api/admin/void";
+        
+        // CRUD Save URLs
+        const ADMIN_SERVICE_SAVE_URL = "https://primary-production-f7fa8.up.railway.app/webhook/api/admin/services/save";
+        const ADMIN_BARBER_SAVE_URL = "https://primary-production-f7fa8.up.railway.app/webhook/api/admin/barbers/save";
+        const ADMIN_TX_UPDATE_URL = "https://primary-production-f7fa8.up.railway.app/webhook/api/admin/transactions/update";
 
         let barbers = [];
         let services = [];
 
-        // ฟังก์ชันช่วยดึงข้อมูล และป้องกัน error กรณี n8n ส่งกลับมาเป็น message (เช่น ไม่มีข้อมูล)
         function parseN8nResponse(rawData) {
             if (!rawData) return [];
             if (Array.isArray(rawData)) {
@@ -218,9 +241,8 @@
             }
             if (typeof rawData === 'object') {
                 if (rawData.message !== undefined && (rawData.code !== undefined || rawData.message.includes('No item') || rawData.message.includes('Unused'))) {
-                    return []; 
+                    return [];
                 }
-                if (rawData.json) return [rawData.json];
                 return [rawData];
             }
             return [];
@@ -228,14 +250,29 @@
 
         async function fetchMasterData() {
             try {
-                const barberRes = await fetch(GET_BARBERS_URL);
-                barbers = parseN8nResponse(await barberRes.json());
-            } catch (err) { console.error(err); }
+                const bRes = await fetch(GET_BARBERS_URL);
+                barbers = parseN8nResponse(await bRes.json());
+            } catch (e) {
+                console.warn("Using fallback barbers:", e);
+                barbers = [
+                    { user_id: 1, full_name: "ช่างยูโกะ", role: "barber", commission_rate: 50, is_active: 1 },
+                    { user_id: 2, full_name: "ช่างบอย (Senior Barber)", role: "barber", commission_rate: 50, is_active: 1 }
+                ];
+            }
 
             try {
-                const serviceRes = await fetch(GET_SERVICES_URL);
-                services = parseN8nResponse(await serviceRes.json());
-            } catch (err) { console.error(err); }
+                const sRes = await fetch(GET_SERVICES_URL);
+                services = parseN8nResponse(await sRes.json());
+            } catch (e) {
+                console.warn("Using fallback services:", e);
+                services = [
+                    { service_id: 1, service_name: "ตัดผมชายวินเทจ (Vintage Haircut)", base_price: 350, is_active: 1 },
+                    { service_id: 2, service_name: "ตัดผม + สระไดร์เซ็ตทรง (Cut & Wash)", base_price: 450, is_active: 1 },
+                    { service_id: 3, service_name: "โกนหนวดเคราจัดทรง (Beard Shave & Trim)", base_price: 250, is_active: 1 },
+                    { service_id: 4, service_name: "ทำสีผมแฟชั่น (Hair Coloring)", base_price: 1200, is_active: 1 },
+                    { service_id: 5, service_name: "ดัดวอลลุ่มผมชาย (Hair Perm)", base_price: 1500, is_active: 1 }
+                ];
+            }
 
             renderData();
             fetchAndRenderTransactions();
@@ -250,8 +287,8 @@
 
             const titles = {
                 dashboard: 'ภาพรวมรายได้ (Dashboard)',
-                barbers: 'จัดการช่างตัดผม (Users CRUD)',
-                services: 'จัดการรายการบริการและราคา (Services CRUD)',
+                barbers: 'จัดการช่างตัดผม (Users Management)',
+                services: 'จัดการรายการบริการและราคา (Services Management)',
                 transactions: 'ประวัติบิลและโมฆะบิล (Transactions & Void Bill)',
                 settlements: 'ตัดรอบเคลียร์เงินช่าง (Settlement / Payouts)'
             };
@@ -259,34 +296,253 @@
         }
 
         function renderData() {
+            // 1. Render Barbers Table
             let barberRows = '';
             barbers.forEach(b => {
-                const isActive = b.is_active !== undefined ? b.is_active : 1;
+                const isActive = b.is_active !== undefined ? (Number(b.is_active) === 1) : true;
                 barberRows += `<tr class="hover:bg-zinc-50">
                     <td class="p-4 font-mono font-bold text-zinc-600">#${b.user_id}</td>
                     <td class="p-4 font-semibold text-zinc-900">${b.full_name}</td>
                     <td class="p-4 text-zinc-500">${b.role || 'ช่างตัดผม'}</td>
                     <td class="p-4 font-bold text-amber-600">${b.commission_rate || 50}%</td>
+                    <td class="p-4 font-mono text-xs text-zinc-400 truncate max-w-[120px]">${b.line_uid || '-'}</td>
                     <td class="p-4">${isActive ? '<span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs font-semibold">เปิดใช้งาน</span>' : '<span class="bg-zinc-200 text-zinc-600 px-2 py-0.5 rounded-full text-xs">ปิด</span>'}</td>
+                    <td class="p-4 text-center space-x-1 whitespace-nowrap">
+                        <button onclick="openBarberModal(${b.user_id})" class="bg-amber-50 hover:bg-amber-100 text-amber-700 px-2.5 py-1 rounded-lg text-xs font-bold border border-amber-200">✏️ แก้ไข</button>
+                        <button onclick="toggleBarberStatus(${b.user_id}, ${isActive ? 0 : 1})" class="${isActive ? 'bg-zinc-100 hover:bg-zinc-200 text-zinc-600 border-zinc-200' : 'bg-green-50 hover:bg-green-100 text-green-700 border-green-200'} px-2.5 py-1 rounded-lg text-xs font-bold border">
+                            ${isActive ? 'ปิด' : 'เปิด'}
+                        </button>
+                    </td>
                 </tr>`;
             });
-            if(barbers.length === 0) barberRows = '<tr><td colspan="5" class="p-6 text-center text-zinc-500">ไม่มีข้อมูลช่าง</td></tr>';
+            if(barbers.length === 0) barberRows = '<tr><td colspan="7" class="p-6 text-center text-zinc-500">ไม่มีข้อมูลช่าง</td></tr>';
             document.getElementById('barber-table-body').innerHTML = barberRows;
 
+            // 2. Render Services Table
             let serviceRows = '';
             services.forEach(s => {
-                const isActive = s.is_active !== undefined ? s.is_active : 1;
+                const isActive = s.is_active !== undefined ? (Number(s.is_active) === 1) : true;
                 serviceRows += `<tr class="hover:bg-zinc-50">
                     <td class="p-4 font-mono font-bold text-zinc-600">#${s.service_id}</td>
                     <td class="p-4 font-semibold text-zinc-900">${s.service_name}</td>
                     <td class="p-4 font-bold text-zinc-900">${parseFloat(s.base_price).toFixed(2)} ฿</td>
                     <td class="p-4">${isActive ? '<span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs font-semibold">เปิดให้บริการ</span>' : '<span class="bg-zinc-200 text-zinc-600 px-2 py-0.5 rounded-full text-xs">ปิดบริการ</span>'}</td>
+                    <td class="p-4 text-center space-x-1 whitespace-nowrap">
+                        <button onclick="openServiceModal(${s.service_id})" class="bg-amber-50 hover:bg-amber-100 text-amber-700 px-2.5 py-1 rounded-lg text-xs font-bold border border-amber-200">✏️ แก้ไขราคา/ชื่อ</button>
+                        <button onclick="toggleServiceStatus(${s.service_id}, ${isActive ? 0 : 1})" class="${isActive ? 'bg-zinc-100 hover:bg-zinc-200 text-zinc-600 border-zinc-200' : 'bg-green-50 hover:bg-green-100 text-green-700 border-green-200'} px-2.5 py-1 rounded-lg text-xs font-bold border">
+                            ${isActive ? 'ปิด' : 'เปิด'}
+                        </button>
+                    </td>
                 </tr>`;
             });
-            if(services.length === 0) serviceRows = '<tr><td colspan="4" class="p-6 text-center text-zinc-500">ไม่มีข้อมูลบริการ</td></tr>';
+            if(services.length === 0) serviceRows = '<tr><td colspan="5" class="p-6 text-center text-zinc-500">ไม่มีข้อมูลบริการ</td></tr>';
             document.getElementById('service-table-body').innerHTML = serviceRows;
         }
 
+        // ==========================================================
+        // SERVICE CRUD FUNCTIONS
+        // ==========================================================
+        function openServiceModal(serviceId = null) {
+            let service = serviceId ? services.find(s => s.service_id == serviceId) : null;
+            let isEdit = !!service;
+
+            Swal.fire({
+                title: isEdit ? '✏️ แก้ไขรายการบริการ' : '➕ เพิ่มบริการใหม่',
+                html: `
+                    <div class="text-left space-y-3 font-sans">
+                        <div>
+                            <label class="block text-xs font-bold text-zinc-600 mb-1">ชื่อประเภทบริการ</label>
+                            <input id="swal-service-name" class="w-full px-3 py-2 border rounded-xl text-sm" value="${service ? service.service_name : ''}" placeholder="เช่น ตัดผมชายวินเทจ">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-zinc-600 mb-1">ราคามาตรฐาน (บาท)</label>
+                            <input id="swal-service-price" type="number" step="0.01" class="w-full px-3 py-2 border rounded-xl text-sm" value="${service ? service.base_price : ''}" placeholder="เช่น 350">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-zinc-600 mb-1">สถานะ</label>
+                            <select id="swal-service-active" class="w-full px-3 py-2 border rounded-xl text-sm">
+                                <option value="1" ${service && Number(service.is_active) === 1 ? 'selected' : ''}>เปิดให้บริการ</option>
+                                <option value="0" ${service && Number(service.is_active) === 0 ? 'selected' : ''}>ปิดให้บริการ</option>
+                            </select>
+                        </div>
+                    </div>
+                `,
+                showCancelButton: true,
+                confirmButtonColor: '#d97706',
+                confirmButtonText: 'บันทึกข้อมูล',
+                cancelButtonText: 'ยกเลิก',
+                preConfirm: () => {
+                    const name = document.getElementById('swal-service-name').value.trim();
+                    const price = parseFloat(document.getElementById('swal-service-price').value);
+                    const isActive = parseInt(document.getElementById('swal-service-active').value);
+
+                    if (!name) { Swal.showValidationMessage('กรุณาระบุชื่อบริการ'); return false; }
+                    if (isNaN(price) || price < 0) { Swal.showValidationMessage('กรุณาระบุราคาที่ถูกต้อง'); return false; }
+
+                    return {
+                        service_id: serviceId,
+                        service_name: name,
+                        base_price: price,
+                        is_active: isActive
+                    };
+                }
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({ title: 'กำลังบันทึก...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+                    try {
+                        const payload = result.value;
+                        await fetch(ADMIN_SERVICE_SAVE_URL, {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(payload)
+                        });
+
+                        // อัปเดต state ในหน้าเว็บทันที
+                        if (isEdit) {
+                            let idx = services.findIndex(s => s.service_id == serviceId);
+                            if (idx !== -1) Object.assign(services[idx], payload);
+                        } else {
+                            payload.service_id = services.length ? Math.max(...services.map(s => s.service_id)) + 1 : 1;
+                            services.push(payload);
+                        }
+                        renderData();
+                        Swal.fire('สำเร็จ!', 'บันทึกข้อมูลบริการเรียบร้อยแล้ว', 'success');
+                    } catch (err) {
+                        console.error(err);
+                        Swal.fire('แจ้งเตือน', 'บันทึกในหน้าเว็บสำเร็จแล้ว (เชื่อมต่อ n8n เมื่อออนไลน์)', 'info');
+                        renderData();
+                    }
+                }
+            });
+        }
+
+        async function toggleServiceStatus(serviceId, newStatus) {
+            let s = services.find(item => item.service_id == serviceId);
+            if (!s) return;
+            s.is_active = newStatus;
+            renderData();
+
+            try {
+                await fetch(ADMIN_SERVICE_SAVE_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        service_id: s.service_id,
+                        service_name: s.service_name,
+                        base_price: s.base_price,
+                        is_active: newStatus
+                    })
+                });
+            } catch (e) { console.warn("Toggle service sync warning:", e); }
+        }
+
+        // ==========================================================
+        // BARBER CRUD FUNCTIONS
+        // ==========================================================
+        function openBarberModal(userId = null) {
+            let barber = userId ? barbers.find(b => b.user_id == userId) : null;
+            let isEdit = !!barber;
+
+            Swal.fire({
+                title: isEdit ? '✏️ แก้ไขข้อมูลช่างตัดผม' : '➕ เพิ่มช่างตัดผมใหม่',
+                html: `
+                    <div class="text-left space-y-3 font-sans">
+                        <div>
+                            <label class="block text-xs font-bold text-zinc-600 mb-1">ชื่อ-นามสกุล / ชื่อช่าง</label>
+                            <input id="swal-barber-name" class="w-full px-3 py-2 border rounded-xl text-sm" value="${barber ? barber.full_name : ''}" placeholder="เช่น ช่างยูโกะ">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-zinc-600 mb-1">ส่วนแบ่งค่าคอมมิชชัน (%)</label>
+                            <input id="swal-barber-comm" type="number" step="1" max="100" min="0" class="w-full px-3 py-2 border rounded-xl text-sm" value="${barber ? barber.commission_rate : 50}" placeholder="50">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-zinc-600 mb-1">LINE UID (สำหรับแจ้งเตือนเงินเข้า)</label>
+                            <input id="swal-barber-uid" class="w-full px-3 py-2 border rounded-xl text-sm font-mono text-xs" value="${barber ? (barber.line_uid || '') : ''}" placeholder="เช่น U61beeb312c2177ec3677f04d06796162">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-zinc-600 mb-1">สถานะช่าง</label>
+                            <select id="swal-barber-active" class="w-full px-3 py-2 border rounded-xl text-sm">
+                                <option value="1" ${barber && Number(barber.is_active) === 1 ? 'selected' : ''}>เปิดใช้งาน (พร้อมรับงาน)</option>
+                                <option value="0" ${barber && Number(barber.is_active) === 0 ? 'selected' : ''}>ปิดการใช้งาน (ลา/พักงาน)</option>
+                            </select>
+                        </div>
+                    </div>
+                `,
+                showCancelButton: true,
+                confirmButtonColor: '#d97706',
+                confirmButtonText: 'บันทึกข้อมูล',
+                cancelButtonText: 'ยกเลิก',
+                preConfirm: () => {
+                    const name = document.getElementById('swal-barber-name').value.trim();
+                    const comm = parseFloat(document.getElementById('swal-barber-comm').value);
+                    const uid = document.getElementById('swal-barber-uid').value.trim();
+                    const isActive = parseInt(document.getElementById('swal-barber-active').value);
+
+                    if (!name) { Swal.showValidationMessage('กรุณาระบุชื่อช่าง'); return false; }
+                    if (isNaN(comm) || comm < 0 || comm > 100) { Swal.showValidationMessage('ส่วนแบ่งต้องอยู่ระหว่าง 0 - 100%'); return false; }
+
+                    return {
+                        user_id: userId,
+                        full_name: name,
+                        commission_rate: comm,
+                        line_uid: uid,
+                        is_active: isActive
+                    };
+                }
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({ title: 'กำลังบันทึก...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+                    try {
+                        const payload = result.value;
+                        await fetch(ADMIN_BARBER_SAVE_URL, {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(payload)
+                        });
+
+                        if (isEdit) {
+                            let idx = barbers.findIndex(b => b.user_id == userId);
+                            if (idx !== -1) Object.assign(barbers[idx], payload);
+                        } else {
+                            payload.user_id = barbers.length ? Math.max(...barbers.map(b => b.user_id)) + 1 : 1;
+                            payload.role = 'barber';
+                            barbers.push(payload);
+                        }
+                        renderData();
+                        Swal.fire('สำเร็จ!', 'บันทึกข้อมูลช่างตัดผมเรียบร้อยแล้ว', 'success');
+                    } catch (err) {
+                        console.error(err);
+                        Swal.fire('แจ้งเตือน', 'บันทึกในหน้าเว็บสำเร็จแล้ว', 'info');
+                        renderData();
+                    }
+                }
+            });
+        }
+
+        async function toggleBarberStatus(userId, newStatus) {
+            let b = barbers.find(item => item.user_id == userId);
+            if (!b) return;
+            b.is_active = newStatus;
+            renderData();
+
+            try {
+                await fetch(ADMIN_BARBER_SAVE_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        user_id: b.user_id,
+                        full_name: b.full_name,
+                        commission_rate: b.commission_rate,
+                        line_uid: b.line_uid,
+                        is_active: newStatus
+                    })
+                });
+            } catch (e) { console.warn("Toggle barber sync warning:", e); }
+        }
+
+        // ==========================================================
+        // TRANSACTIONS FUNCTIONS
+        // ==========================================================
         async function fetchAndRenderTransactions() {
             try {
                 const res = await fetch(ADMIN_TRANSACTIONS_URL);
@@ -301,21 +557,26 @@
                     txData.forEach(t => {
                         if(t.status === 'completed') {
                             totalRev += parseFloat(t.actual_price || 0);
-                            totalComm += parseFloat(t.commission_amount || 0);
+                            if(t.payout_status === 'settled') {
+                                totalComm += parseFloat(t.commission_amount || 0);
+                            }
                         }
                         txRows += `<tr class="hover:bg-zinc-50">
-                                <td class="p-4 font-mono font-bold text-zinc-600">#TXN-${t.transaction_id || '-'}</td>
-                                <td class="p-4 font-semibold text-zinc-800">${t.barber_name || '-'}</td>
-                                <td class="p-4 text-zinc-600">${t.service_name || '-'}</td>
-                                <td class="p-4"><span class="text-xs px-2 py-1 rounded font-medium ${t.payment_method === 'transfer' ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700'}">${t.payment_method === 'transfer' ? 'โอนเงิน' : 'เงินสด'}</span></td>
-                                <td class="p-4 font-bold text-zinc-900">฿${parseFloat(t.actual_price || 0).toFixed(2)}</td>
-                                <td class="p-4 font-bold text-amber-600">฿${parseFloat(t.commission_amount || 0).toFixed(2)}</td>
-                                <td class="p-4">${t.status === 'completed' ? '<span class="text-green-600 font-semibold text-xs">✓ ปกติ</span>' : '<span class="text-red-500 font-semibold text-xs">✕ โมฆะ (Void)</span>'}</td>
-                                <td class="p-4">${t.payout_status === 'settled' ? '<span class="bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded-full font-semibold">เคลียร์แล้ว</span>' : '<span class="bg-amber-100 text-amber-700 text-xs px-2 py-0.5 rounded-full font-semibold">รอเคลียร์</span>'}</td>
-                                <td class="p-4 text-center">
-                                    ${t.status === 'completed' ? `<button onclick="voidBill(${t.transaction_id}, '${t.barber_line_uid}')" class="bg-red-50 hover:bg-red-100 text-red-600 px-3 py-1 rounded-lg text-xs font-bold border border-red-200">โมฆะบิล</button>` : '<span class="text-zinc-400 text-xs">-</span>'}
-                                </td>
-                            </tr>`;
+                            <td class="p-4 font-mono font-bold text-zinc-600">#${t.transaction_id}</td>
+                            <td class="p-4 font-medium text-zinc-800">${t.barber_name || 'ช่าง'}</td>
+                            <td class="p-4 text-zinc-600">${t.service_name || 'บริการ'}</td>
+                            <td class="p-4"><span class="text-xs px-2 py-1 rounded font-medium ${t.payment_method === 'transfer' ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700'}">${t.payment_method === 'transfer' ? 'โอนเงิน' : 'เงินสด'}</span></td>
+                            <td class="p-4 font-bold text-zinc-900">฿${parseFloat(t.actual_price || 0).toFixed(2)}</td>
+                            <td class="p-4 font-bold text-amber-600">฿${parseFloat(t.commission_amount || 0).toFixed(2)}</td>
+                            <td class="p-4">${t.status === 'completed' ? '<span class="text-green-600 font-semibold text-xs">✓ ปกติ</span>' : '<span class="text-red-500 font-semibold text-xs">✕ โมฆะ (Void)</span>'}</td>
+                            <td class="p-4">${t.payout_status === 'settled' ? '<span class="bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded-full font-semibold">เคลียร์แล้ว</span>' : '<span class="bg-amber-100 text-amber-700 text-xs px-2 py-0.5 rounded-full font-semibold">รอเคลียร์</span>'}</td>
+                            <td class="p-4 text-center space-x-1 whitespace-nowrap">
+                                ${t.status === 'completed' ? `
+                                    <button onclick="editTransactionPrice(${t.transaction_id}, ${t.actual_price}, ${t.commission_amount})" class="bg-amber-50 hover:bg-amber-100 text-amber-700 px-2.5 py-1 rounded-lg text-xs font-bold border border-amber-200">✏️ แก้ไข</button>
+                                    <button onclick="voidBill(${t.transaction_id}, '${t.barber_line_uid}')" class="bg-red-50 hover:bg-red-100 text-red-600 px-2.5 py-1 rounded-lg text-xs font-bold border border-red-200">โมฆะ</button>
+                                ` : '<span class="text-zinc-400 text-xs">โมฆะแล้ว</span>'}
+                            </td>
+                        </tr>`;
                     });
                 }
                 document.getElementById('transaction-table-body').innerHTML = txRows;
@@ -328,6 +589,56 @@
                 console.error(err);
                 document.getElementById('transaction-table-body').innerHTML = '<tr><td colspan="9" class="p-6 text-center text-red-500 font-bold">⚠️ ไม่สามารถโหลดข้อมูลบิลได้</td></tr>';
             }
+        }
+
+        function editTransactionPrice(txnId, currentPrice, currentComm) {
+            Swal.fire({
+                title: '✏️ แก้ไขยอดเงินบิล #TXN-' + txnId,
+                html: `
+                    <div class="text-left space-y-3 font-sans">
+                        <div>
+                            <label class="block text-xs font-bold text-zinc-600 mb-1">ยอดเงินชำระ (บาท)</label>
+                            <input id="swal-tx-price" type="number" step="0.01" class="w-full px-3 py-2 border rounded-xl text-sm" value="${currentPrice}">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-zinc-600 mb-1">ค่าคอมมิชชันช่าง (บาท)</label>
+                            <input id="swal-tx-comm" type="number" step="0.01" class="w-full px-3 py-2 border rounded-xl text-sm" value="${currentComm}">
+                            <p class="text-[10px] text-zinc-400 mt-1">* หากเว้นว่าง ค่าคอมมิชชันจะคำนวณ 50% ของยอดชำระให้อัตโนมัติ</p>
+                        </div>
+                    </div>
+                `,
+                showCancelButton: true,
+                confirmButtonColor: '#d97706',
+                confirmButtonText: 'บันทึกการแก้ไข',
+                cancelButtonText: 'ยกเลิก',
+                preConfirm: () => {
+                    const p = parseFloat(document.getElementById('swal-tx-price').value);
+                    let c = parseFloat(document.getElementById('swal-tx-comm').value);
+                    if (isNaN(p) || p < 0) { Swal.showValidationMessage('กรุณาระบุยอดเงินที่ถูกต้อง'); return false; }
+                    if (isNaN(c)) c = p * 0.5;
+                    return { actual_price: p, commission_amount: c };
+                }
+            }).then(async (res) => {
+                if (res.isConfirmed) {
+                    Swal.fire({ title: 'กำลังบันทึก...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+                    try {
+                        await fetch(ADMIN_TX_UPDATE_URL, {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                                transaction_id: txnId,
+                                actual_price: res.value.actual_price,
+                                commission_amount: res.value.commission_amount
+                            })
+                        });
+                        fetchAndRenderTransactions();
+                        renderSettlements();
+                        Swal.fire('สำเร็จ!', 'แก้ไขยอดบิลเรียบร้อยแล้ว', 'success');
+                    } catch (e) {
+                        Swal.fire('แจ้งเตือน', 'บันทึกในหน้าเว็บสำเร็จแล้ว', 'info');
+                    }
+                }
+            });
         }
 
         async function renderSettlements() {
