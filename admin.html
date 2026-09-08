@@ -668,7 +668,7 @@
                             <td class="p-4 text-center space-x-1 whitespace-nowrap">
                                 ${t.status === 'completed' ? `
                                     <button onclick="editTransactionPrice(${t.transaction_id}, ${t.actual_price}, ${t.commission_amount})" class="bg-amber-50 hover:bg-amber-100 text-amber-700 px-2.5 py-1 rounded-lg text-xs font-bold border border-amber-200">✏️ แก้ไข</button>
-                                    <button onclick="voidBill(${t.transaction_id}, '${t.barber_line_uid}')" class="bg-red-50 hover:bg-red-100 text-red-600 px-2.5 py-1 rounded-lg text-xs font-bold border border-red-200">โมฆะ</button>
+                                    <button onclick="voidBill(${t.transaction_id}, '${t.barber_line_uid || ''}', '${(t.service_name || '').replace(/'/g, "\\'")}', ${t.actual_price || 0}, ${t.commission_amount || 0})" class="bg-red-50 hover:bg-red-100 text-red-600 px-2.5 py-1 rounded-lg text-xs font-bold border border-red-200">โมฆะ</button>
                                 ` : '<span class="text-zinc-400 text-xs">โมฆะแล้ว</span>'}
                             </td>
                         </tr>`;
@@ -765,7 +765,7 @@
             }
         }
 
-        function voidBill(id, barberLineUid) {
+        function voidBill(id, barberLineUid, serviceName = '', actualPrice = 0, commissionAmount = 0) {
             Swal.fire({
                 title: 'ยืนยันทำโมฆะบิล?',
                 text: 'คุณต้องการยกเลิกบิล #TXN-' + id + ' และปรับค่าคอมมิชชันเป็น 0 บาทหรือไม่?',
@@ -779,7 +779,14 @@
                 if (result.isConfirmed) {
                     Swal.fire({ title: 'กำลังบันทึก...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
                     try {
-                        await sendAdminRequest('void_bill', { transaction_id: id, barber_line_uid: barberLineUid }, ADMIN_VOID_URL);
+                        await sendAdminRequest('void_bill', {
+                            transaction_id: id,
+                            barber_line_uid: barberLineUid,
+                            service_name: serviceName || 'บริการตัดผม',
+                            actual_price: actualPrice || 0,
+                            commission_amount: commissionAmount || 0,
+                            void_reason: 'ยกเลิกรายการโดยผู้ดูแลระบบ'
+                        }, ADMIN_VOID_URL);
                         fetchAndRenderTransactions();
                         renderSettlements();
                         Swal.fire('สำเร็จ', 'โมฆะบิลเรียบร้อยแล้ว', 'success');
@@ -791,7 +798,7 @@
         function executeSettlement(userId, barberName, lineUid, totalJobs, totalRevenue, totalCommission) {
             Swal.fire({
                 title: 'ตัดรอบเคลียร์เงิน ' + barberName,
-                html: '<div class="text-left text-sm space-y-3"><p>ยอดเงินที่ต้องโอนให้ช่าง: <strong class="text-emerald-600 text-base">฿' + parseFloat(totalCommission).toFixed(2) + '</strong></p></div>',
+                html: '<div class="text-left text-sm space-y-3"><p>ช่าง: <strong>' + barberName + '</strong></p><p>จำนวนงาน: <strong>' + totalJobs + ' งาน</strong></p><p>ยอดเงินที่ต้องโอนให้ช่าง: <strong class="text-emerald-600 text-base">฿' + parseFloat(totalCommission).toFixed(2) + '</strong></p></div>',
                 showCancelButton: true,
                 confirmButtonColor: '#059669',
                 confirmButtonText: 'ยืนยันโอนเงิน & แจ้งเตือนช่าง',
@@ -800,12 +807,18 @@
                 if (result.isConfirmed) {
                     Swal.fire({ title: 'กำลังบันทึกข้อมูล...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
                     try {
+                        const todayStr = new Date().toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric' });
                         await sendAdminRequest('settle_payout', {
                             user_id: userId,
+                            barber_name: barberName,
                             line_uid: lineUid,
                             total_jobs: totalJobs,
                             total_revenue: totalRevenue,
-                            total_commission: totalCommission
+                            total_commission: totalCommission,
+                            commission_total: totalCommission,
+                            net_payout: totalCommission,
+                            start_date: todayStr,
+                            end_date: todayStr
                         }, ADMIN_SETTLE_URL);
 
                         renderSettlements();
