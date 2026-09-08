@@ -236,25 +236,33 @@
         let services = [];
 
         // Resilient Enterprise API Dispatcher: tries Admin Gateway first, then direct fallback
-        async function sendAdminRequest(action, payload, fallbackUrl) {
+        async function sendAdminRequest(action, payload = {}, fallbackUrl = null) {
             try {
                 let res = await fetch(ADMIN_GATEWAY_URL, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ action, ...payload })
                 });
-                if (res.ok) return await res.json();
+                if (res.ok) {
+                    return await res.json();
+                }
+                console.warn(`Gateway returned status ${res.status} for ${action}`);
             } catch (e) {
-                console.warn("Gateway request failed, trying direct endpoint:", e);
+                console.warn(`Gateway request failed for ${action}:`, e);
             }
             if (fallbackUrl) {
-                let fallbackRes = await fetch(fallbackUrl, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(payload)
-                });
-                return await fallbackRes.json();
+                try {
+                    let fallbackRes = await fetch(fallbackUrl, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(payload)
+                    });
+                    if (fallbackRes.ok) return await fallbackRes.json();
+                } catch (err) {
+                    console.warn(`Fallback failed for ${action}:`, err);
+                }
             }
+            return [];
         }
 
         function parseN8nResponse(rawData) {
@@ -316,6 +324,15 @@
                 settlements: 'ตัดรอบเคลียร์เงินช่าง (Settlement / Payouts)'
             };
             document.getElementById('page-title').innerText = titles[tabId];
+
+            if (tabId === 'transactions') {
+                fetchAndRenderTransactions();
+            } else if (tabId === 'settlements') {
+                renderSettlements();
+            } else if (tabId === 'dashboard') {
+                fetchAndRenderTransactions();
+                renderSettlements();
+            }
         }
 
         function updateImagePreview(boxId, url, fallbackIcon) {
@@ -623,8 +640,8 @@
         // ==========================================================
         async function fetchAndRenderTransactions() {
             try {
-                const res = await fetch(ADMIN_TRANSACTIONS_URL);
-                const txData = parseN8nResponse(await res.json());
+                const raw = await sendAdminRequest('get_transactions', {}, ADMIN_TRANSACTIONS_URL);
+                const txData = parseN8nResponse(raw);
                 
                 let totalRev = 0;
                 let totalComm = 0;
@@ -718,8 +735,8 @@
 
         async function renderSettlements() {
             try {
-                const res = await fetch(ADMIN_PAYOUTS_URL);
-                const pData = parseN8nResponse(await res.json());
+                const raw = await sendAdminRequest('get_payouts', {}, ADMIN_PAYOUTS_URL);
+                const pData = parseN8nResponse(raw);
                 
                 let cards = '';
                 if(pData.length === 0) {
