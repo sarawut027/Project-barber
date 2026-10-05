@@ -265,16 +265,6 @@
             selected_service_name = name;
             document.querySelectorAll('.service-card').forEach(el => el.classList.remove('card-selected'));
             cardElement.classList.add('card-selected');
-
-            // อัปเดต QR Code พร้อมเพย์ตามยอดเงินของบริการที่เลือก (หรือใช้ QR หลักของร้าน)
-            const qrImg = document.getElementById('promptpay-qr-image');
-            if (qrImg && price) {
-                const dynamicQR = `https://promptpay.io/0988701572/${price}.png`;
-                const tempImg = new Image();
-                tempImg.onload = () => { qrImg.src = dynamicQR; };
-                tempImg.onerror = () => { qrImg.src = './images/promptpay_qr.jpg'; };
-                tempImg.src = dynamicQR;
-            }
         }
 
         async function loadDataFromDatabase() {
