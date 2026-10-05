@@ -134,7 +134,7 @@
                 <div class="text-center mb-4">
                     <p class="text-sm font-semibold text-slate-600 mb-2">สแกน QR เพื่อโอนเงินเข้าบัญชี</p>
                     <div class="relative inline-block">
-                        <img id="promptpay-qr-image" src="./images/qrcode.jpg" alt="QR Code" class="w-56 h-56 mx-auto rounded-xl border border-slate-200 shadow-sm mb-3 object-cover">
+                        <img id="promptpay-qr-image" src="./images/promptpay_qr.jpg" alt="QR Code พร้อมเพย์" class="w-56 h-56 mx-auto rounded-xl border border-slate-200 shadow-sm mb-3 object-contain bg-white" onerror="this.onerror=null; this.src='./images/qrcode.jpg';">
                     </div>
                     <div class="bg-slate-50 border border-slate-100 rounded-xl p-3 text-left">
                         <div class="flex items-center mb-2">
@@ -265,6 +265,16 @@
             selected_service_name = name;
             document.querySelectorAll('.service-card').forEach(el => el.classList.remove('card-selected'));
             cardElement.classList.add('card-selected');
+
+            // อัปเดต QR Code พร้อมเพย์ตามยอดเงินของบริการที่เลือก (หรือใช้ QR หลักของร้าน)
+            const qrImg = document.getElementById('promptpay-qr-image');
+            if (qrImg && price) {
+                const dynamicQR = `https://promptpay.io/0988701572/${price}.png`;
+                const tempImg = new Image();
+                tempImg.onload = () => { qrImg.src = dynamicQR; };
+                tempImg.onerror = () => { qrImg.src = './images/promptpay_qr.jpg'; };
+                tempImg.src = dynamicQR;
+            }
         }
 
         async function loadDataFromDatabase() {
